@@ -53,5 +53,4 @@ public class Frame extends JFrame {
         // Per ora lasciamo il layout assoluto
         contentPane.setLayout(null);
     }
-    //prova
 }
