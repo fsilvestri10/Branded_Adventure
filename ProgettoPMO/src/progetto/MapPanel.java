@@ -4,7 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -18,9 +22,14 @@ public class MapPanel extends JPanel {
     private Image playerImage;
     private Image treeImage;
 
-    private int playerX = 20;
-    private int playerY = 20;
+    private int playerX = 25*this.tileSize;
+    private int playerY = 25*this.tileSize;
+    private int speed = 10;
+    private Rectangle hitbox = new Rectangle(playerX, playerY, tileSize, tileSize);
+    private ArrayList<Rectangle> treesHitbox = new ArrayList<>();
 
+    private Random rnd = new Random();
+    
     // Gestore tastiera
     private KeyHandler keyH = new KeyHandler();
 
@@ -39,30 +48,39 @@ public class MapPanel extends JPanel {
             }
         }
         
+        for(int i = 0; i < 10; i++) {
+        	if(!this.putTree()) i--; 
+        }
+        
         try {
             playerImage = ImageIO.read(getClass().getResource("/player.png"));
             treeImage = ImageIO.read(getClass().getResource("/tree.png"));
         } catch (IOException | IllegalArgumentException e) {
             e.printStackTrace();
         }
+        
     }
+    
 
     // METODO PER AGGIORNARE IL MOVIMENTO
     public void updatePlayer() {
+    	
         int nextX = playerX;
         int nextY = playerY;
 
-        if (keyH.upPressed) nextY--;
-        if (keyH.downPressed) nextY++;
-        if (keyH.leftPressed) nextX--;
-        if (keyH.rightPressed) nextX++;
+        if (keyH.upPressed) nextY-=this.speed;
+        if (keyH.downPressed) nextY+=this.speed;
+        if (keyH.leftPressed) nextX-=this.speed;
+        if (keyH.rightPressed) nextX+=this.speed;
 
-        // Controlla che la nuova casella non sia un muro (valore 1)
-        if (nextX >= 0 && nextX < 50 && nextY >= 0 && nextY < 50) {
-            if (map[nextX][nextY] != 1) {
-                playerX = nextX;
-                playerY = nextY;
-            }
+        int x = nextX/this.tileSize;
+        int y = nextY/this.tileSize;
+        
+        for(int i = 0; i < this.treesHitbox.size(); i++) {
+	        if (!this.hitbox.intersects(this.treesHitbox.get(i))) {
+	            playerX = nextX;
+	            playerY = nextY;
+	        }
         }
     }
 
@@ -76,8 +94,8 @@ public class MapPanel extends JPanel {
         int screenCenterY = getHeight() / 2 - (tileSize / 2);
 
         // 2. CALCOLA LA POSIZIONE DEL PLAYER NEL MONDO (in pixel)
-        int playerWorldX = playerX * tileSize;
-        int playerWorldY = playerY * tileSize;
+        int playerWorldX = playerX;
+        int playerWorldY = playerY;
 
         // DISEGNO DELLA MAPPA (Spostata rispetto al Player)
         for (int y = 0; y < map.length; y++) {
@@ -91,26 +109,30 @@ public class MapPanel extends JPanel {
                 int screenX = tileWorldX - playerWorldX + screenCenterX;
                 int screenY = tileWorldY - playerWorldY + screenCenterY;
 
-                // Disegna la tessera solo se è visibile a schermo
-                if (screenX + tileSize > 0 && screenX < getWidth() &&
-                    screenY + tileSize > 0 && screenY < getHeight()) {
-
-                    if (map[x][y] == 1) {
-                        g2.setColor(Color.DARK_GRAY);
-                    } else {
-                        g2.setColor(new Color(0, 143, 57));
-                    }
-
-                    g2.fillRect(screenX, screenY, tileSize, tileSize);
-
-                    g2.setColor(Color.BLACK);
-                    g2.drawRect(screenX, screenY, tileSize, tileSize);
+                switch(map[x][y]) {
+                	case 0, 2:
+                		g2.setColor(new Color(0, 143, 57));
+                		break;
+                	case 1:
+                		g2.setColor(Color.DARK_GRAY);
+                		break;
                 }
+                g2.fillRect(screenX, screenY, tileSize, tileSize);
+                if(map[x][y] == 2) {
+                	g2.drawImage(treeImage, screenX, screenY, tileSize, tileSize, null);
+                	this.treesHitbox.add(new Rectangle(screenX, screenY, 70, 70));
+                	System.out.println(new Rectangle(screenX, screenY, 70, 70) + " " + treesHitbox.getLast());
+                	g2.draw(treesHitbox.getLast());
+                }
+                g2.setColor(Color.BLACK);
+                g2.drawRect(screenX, screenY, tileSize, tileSize);
+                
             }
         }
-
+        
         // DISEGNO DEL PLAYER (Sempre al centro)
         if (playerImage != null) {
+            // Il player NON usa più (playerX * tileSize), ma viene disegnato sempre al centro dello schermo!
             g2.drawImage(
                 playerImage,
                 screenCenterX,
@@ -120,5 +142,21 @@ public class MapPanel extends JPanel {
                 null
             );
         }
+        this.hitbox.setBounds(screenCenterX, screenCenterY, this.tileSize, this.tileSize);
+        g2.draw(hitbox);
+        
     }
+    private boolean putTree() {
+    	int posX = this.rnd.nextInt(1,49);
+    	int posY = this.rnd.nextInt(10,49);
+    	
+    	if(this.map[posX][posY] == 0) {
+    		this.map[posX][posY] = 2;
+    		return true;
+    	} else {
+    		return false;
+    	}
+    	
+    }
+    
 }

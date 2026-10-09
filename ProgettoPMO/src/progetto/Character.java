@@ -24,4 +24,5 @@ public abstract class Character {
 	public void attack() {
 		
 	}
+	
 }
