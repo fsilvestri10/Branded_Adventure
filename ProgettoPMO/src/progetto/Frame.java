@@ -20,7 +20,6 @@ public class Frame extends JFrame {
                 try {
 
                     Frame frame = new Frame();
-
                     frame.setVisible(true);
 
                 } catch (Exception e) {
@@ -32,25 +31,17 @@ public class Frame extends JFrame {
     }
 
     public Frame() {
-
-        // Chiude il programma quando chiudi la finestra
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1000, 800); 
 
-        // Posizione e dimensione della finestra
-        setBounds(100, 100, 2500, 1464);
+        MapPanel mapPanel = new MapPanel();
+        setContentPane(mapPanel);
 
-        // Creiamo il pannello della mappa
-        contentPane = new MapPanel();
-
-        // Bordo del pannello
-        contentPane.setBorder(
-            new EmptyBorder(5, 5, 5, 5)
-        );
-
-        // Inseriamo il pannello nella finestra
-        setContentPane(contentPane);
-
-        // Per ora lasciamo il layout assoluto
-        contentPane.setLayout(null);
+        // Ciclo di gioco a 60 FPS per aggiornare posizione e schermo
+        javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+            mapPanel.updatePlayer();
+            mapPanel.repaint();
+        });
+        timer.start();
     }
 }
