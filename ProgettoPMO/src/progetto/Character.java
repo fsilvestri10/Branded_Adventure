@@ -20,7 +20,7 @@ public abstract class Character {
 		this.strength = level*3;
 		this.speed = level*3;
 	}
-	//test
+	
 	public void attack() {
 		
 	}
