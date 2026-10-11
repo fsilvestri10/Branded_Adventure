@@ -23,8 +23,9 @@ public class MapPanel extends JPanel {
 
     private int playerX = 25*this.tileSize;
     private int playerY = 25*this.tileSize;
+    private int playerSide = 0;
     private int speed = 10;
-    private Rectangle hitbox = new Rectangle(playerX, playerY, tileSize, tileSize);
+    private Rectangle hitbox = new Rectangle(playerX, playerY, tileSize, tileSize); //(NON SERVE PIU)
     private ArrayList<WorldObject> objectHitbox = new ArrayList<>();
 
     private Random rnd = new Random();
@@ -41,6 +42,7 @@ public class MapPanel extends JPanel {
             for(int j = 0; j < 50; j++) {
                 if(j == 49 || j == 9 || (j<9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) || (i == 0 || i == 49) && j > 9) {
                     map[i][j] = 1;
+            		this.objectHitbox.add(new Wall(i*this.tileSize, j*this.tileSize, this.tileSize, this.tileSize));
                 } else {
                     map[i][j] = 0;
                 }
@@ -62,70 +64,41 @@ public class MapPanel extends JPanel {
 
     // METODO PER AGGIORNARE IL MOVIMENTO
     public void updatePlayer() {
-    	
         int nextX = 0;
         int nextY = 0;
         
-
         if (keyH.upPressed) nextY-=this.speed;
         if (keyH.downPressed) nextY+=this.speed;
-        if (keyH.leftPressed) nextX-=this.speed;
-        if (keyH.rightPressed) nextX+=this.speed;
+        if (keyH.leftPressed) {
+        	nextX-=this.speed;
+        	playerSide = 2;
+        }
+        if (keyH.rightPressed) {
+        	nextX+=this.speed;
+        	playerSide = 0;
+        }
 
-        if(nextX == 0 && nextY == 0) return;
-        int x = nextX/this.tileSize;
-        int y = nextY/this.tileSize;
-        
-        // Controlla che la nuova casella non sia un muro (valore 1)
-        //if (x >= 0 && x < 50 && x+2>=0 && x+2 < 50) {
-        //	if(y >= 0 && y < 50 && y+2>=0 && y+2 < 50) {
-        boolean collision = false;
-        /*
-        for (WorldObject object : this.objectHitbox) {
-	        if (this.hitbox.intersects(object.getHibox())) {
-	            collision = true;
-	        }
-        }*/
-        
-        
-        if(nextX != 0) {
-        	boolean collisionX = false;
+        // Controllo movimento asse x
+        boolean collisionX = false;
         int dx = playerX + nextX;
-        
-        Rectangle nextHitboxX = new Rectangle(dx,playerY, 40, 40);
+        Rectangle nextHitboxX = new Rectangle(dx, playerY, tileSize, tileSize);
         for (WorldObject object : this.objectHitbox) {
 	        if (nextHitboxX.intersects(object.getHibox())) {
 	            collisionX = true;
 	        }
         }
         if(!collisionX) playerX = dx;
-        }
-        if(nextY != 0) {
+        
+        // Controllo movimento asse y
         	boolean collisionY = false;
         int dy = playerY + nextY;
-        Rectangle nextHitboxY = new Rectangle(playerX,dy, 40, 40);
+        Rectangle nextHitboxY = new Rectangle(playerX, dy, tileSize, tileSize);
         for (WorldObject object : this.objectHitbox) {
 	        if (nextHitboxY.intersects(object.getHibox())) {
 	            collisionY = true;
 	        }
         }
         if(!collisionY) playerY = dy;
-        }
-        /*
-        if(!collision) {
-	        playerX = nextX;
-	        playerY = nextY;
-        } else {
-        	if(playerX > nextX) {
-        		// controlliamo se si puo muovere verso sinistra
-        		if()
-        	} else if(playerX < nextX) {
-        		
-        	}
-        	
-        }*/
-        //	}
-        //}
     }
 
     @Override
@@ -134,8 +107,8 @@ public class MapPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
 
         // 1. TROVA IL CENTRO DELLA FINESTRA
-        int screenCenterX = getWidth() / 2; // - (tileSize / 2);
-        int screenCenterY = getHeight() / 2; // - (tileSize / 2);
+        int screenCenterX = getWidth() / 2;
+        int screenCenterY = getHeight() / 2;
 
         // 2. CALCOLA LA POSIZIONE DEL PLAYER NEL MONDO (in pixel)
         int playerWorldX = playerX;
@@ -167,13 +140,7 @@ public class MapPanel extends JPanel {
                 			g2.setColor(Color.DARK_GRAY);
                 			break;
                 	}
-                	g2.fillRect(screenX, screenY, tileSize, tileSize);
-
-                	for(WorldObject object : this.objectHitbox) {
-                		object.draw(g2, playerWorldX, playerWorldY, screenCenterX, screenCenterY);
-                		
-                	}
-                	
+                	g2.fillRect(screenX, screenY, tileSize, tileSize);          	
                     g2.setColor(Color.BLACK);
                     //g2.drawRect(screenX, screenY, tileSize, tileSize);
                 //}
@@ -181,30 +148,58 @@ public class MapPanel extends JPanel {
         }
         
         // ====================================
+        // DISEGNO DEGLI ALBERI
+        // ====================================
+    	for(WorldObject object : this.objectHitbox) {
+    		object.draw(g2, playerWorldX, playerWorldY, screenCenterX, screenCenterY);
+    	}
+        
+        // ====================================
         // DISEGNO DEL PLAYER (Sempre al centro)
         // ====================================
         if (playerImage != null) {
-            // Il player NON usa più (playerX * tileSize), ma viene disegnato sempre al centro dello schermo!
-            g2.drawImage(
-                playerImage,
-                screenCenterX,
-                screenCenterY,
-                tileSize,
-                tileSize,
-                null
-            );
+        	switch (playerSide) {
+        		case 0:
+                    g2.drawImage(
+                            playerImage,
+                            screenCenterX,
+                            screenCenterY,
+                            tileSize,
+                            tileSize,
+                            null
+                        );
+        			break;
+        			
+        		case 1:
+        			
+        			break;
+        			
+        		case 2:
+        			//drawX = -tileSize;
+                    g2.drawImage(
+                            playerImage,
+                            screenCenterX + tileSize,
+                            screenCenterY,
+                            -tileSize,
+                            tileSize,
+                            null
+                    );
+        			break;
+        		case 3:
+        			
+        			break;
+        	}
         }
-        this.hitbox.setBounds(screenCenterX, screenCenterY, this.tileSize, this.tileSize);
-        g2.draw(hitbox);
-        
+        this.hitbox.setBounds(screenCenterX, screenCenterY, this.tileSize, this.tileSize);  // ERA PER IL DEBUG (DISEGNAVA LA HITBOX)
+        g2.draw(hitbox);																	// MA NON SERVE
     }
     private boolean putTree() {
-    	int posX = this.rnd.nextInt(1,49);
-    	int posY = this.rnd.nextInt(10,49);
+    	int posX = this.rnd.nextInt(2,48);
+    	int posY = this.rnd.nextInt(11,48);
     	
     	if(this.map[posX][posY] == 0) {
     		this.map[posX][posY] = 2;
-    		this.objectHitbox.add(new Tree(posX*this.tileSize, posY*this.tileSize, this.tileSize, this.tileSize));
+    		this.objectHitbox.add(new Tree(posX*this.tileSize, posY*this.tileSize, this.tileSize * 2, this.tileSize * 2));
     		return true;
     	} else {
     		return false;

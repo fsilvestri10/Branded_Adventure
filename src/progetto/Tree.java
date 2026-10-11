@@ -23,11 +23,7 @@ public class Tree extends WorldObject{
 	public void draw(Graphics2D g2, int playerX, int playerY, int screenCenterX, int screenCenterY) {
 		int screenX = this.tileWorldX - playerX + screenCenterX;
         int screenY = this.tileWorldY - playerY + screenCenterY;
-        
-        if(this.image != null) g2.drawImage(this.image, screenX, screenY, this.width, this.height, null);
-        this.hitbox.setBounds(screenX, screenY, this.width, this.height);
-        g2.draw(super.hitbox);
+        if(this.image != null) g2.drawImage(this.image, screenX, screenY, this.width, this.height, null);  
+        g2.drawRect(screenX, screenY, this.width, this.height);				//hitbox alberi per debug
 	}
-	
-	
 }
