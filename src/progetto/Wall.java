@@ -8,15 +8,9 @@ import javax.imageio.ImageIO;
 
 public class Wall extends WorldObject{
 
-	private Image image;
-	
-	public Wall(int tileWorldX, int tileWorldY, int width, int height) {
-		super(tileWorldX, tileWorldY, width, height);
-		try {
-			this.image = ImageIO.read(getClass().getResource("/wall.png"));
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+	public Wall(int tileWorldX, int tileWorldY, int width, int height, String imageId) {
+		super(tileWorldX, tileWorldY, width, height, imageId);
+		
 	}
 
 	@Override

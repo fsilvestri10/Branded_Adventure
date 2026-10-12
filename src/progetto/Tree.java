@@ -7,23 +7,18 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Tree extends WorldObject{
-
-	private Image image;
 	
-	public Tree(int tileWorldX, int tileWorldY, int width, int height) {
-		super(tileWorldX, tileWorldY, width, height);
-		try {
-			this.image = ImageIO.read(getClass().getResource("/tree.png"));
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+	public Tree(int tileWorldX, int tileWorldY, int width, int height, String imageId) {
+		super(tileWorldX, tileWorldY, width, height, imageId);
+		
 	}
 
 	@Override
 	public void draw(Graphics2D g2, int playerX, int playerY, int screenCenterX, int screenCenterY) {
 		int screenX = this.tileWorldX - playerX + screenCenterX;
         int screenY = this.tileWorldY - playerY + screenCenterY;
-        if(this.image != null) g2.drawImage(this.image, screenX, screenY, this.width, this.height, null);  
+        if(this.image != null) g2.drawImage(this.image, screenX-20, screenY-20, this.width+40, this.height+40, null);
+        
         g2.drawRect(screenX, screenY, this.width, this.height);				//hitbox alberi per debug
 	}
 }

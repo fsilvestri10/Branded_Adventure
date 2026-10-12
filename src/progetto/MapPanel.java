@@ -42,7 +42,7 @@ public class MapPanel extends JPanel {
             for(int j = 0; j < 50; j++) {
                 if(j == 49 || j == 9 || (j<9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) || (i == 0 || i == 49) && j > 9) {
                     map[i][j] = 1;
-            		this.objectHitbox.add(new Wall(i*this.tileSize, j*this.tileSize, this.tileSize, this.tileSize));
+            		this.objectHitbox.add(new Wall(i*this.tileSize, j*this.tileSize, this.tileSize, this.tileSize, "Wall"));
                 } else {
                     map[i][j] = 0;
                 }
@@ -51,6 +51,7 @@ public class MapPanel extends JPanel {
         
         for(int i = 0; i < 10; i++) {
         	if(!this.putTree()) i--;
+        	this.spawnEnemy();
         }
         
         try {
@@ -133,7 +134,7 @@ public class MapPanel extends JPanel {
                 //    screenY + tileSize > 0 && screenY < getHeight()) {
 
                 	switch(map[x][y]) {
-                		case 0, 2:
+                		case 0, 2, 3:
                 			g2.setColor(new Color(0, 143, 57));
                 			break;
                 		case 1:
@@ -199,12 +200,25 @@ public class MapPanel extends JPanel {
     	
     	if(this.map[posX][posY] == 0) {
     		this.map[posX][posY] = 2;
-    		this.objectHitbox.add(new Tree(posX*this.tileSize, posY*this.tileSize, this.tileSize * 2, this.tileSize * 2));
+    		this.objectHitbox.add(new Tree(posX*this.tileSize, posY*this.tileSize, this.tileSize , this.tileSize, "Tree"));
     		return true;
     	} else {
     		return false;
     	}
     	
+    }
+    private boolean spawnEnemy() {
+    	
+    	int posX = this.rnd.nextInt(14,36);
+    	int posY = this.rnd.nextInt(23,36);
+    	
+    	if(this.map[posX][posY] == 0) {
+    		this.map[posX][posY] = 3;
+    		this.objectHitbox.add(new Enemy("pus", 10, 2, posX*this.tileSize, posY*this.tileSize, this.tileSize , this.tileSize, "Enemy"));
+    		return true;
+    	} else {
+    		return false;
+    	}
     }
     
 }
