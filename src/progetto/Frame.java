@@ -1,6 +1,8 @@
 package progetto;
 import java.awt.EventQueue;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -10,6 +12,8 @@ public class Frame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private JPanel contentPane;
+    
+    protected FightPanel fightPanel = null;
     
 
     public static void main(String[] args) {
@@ -32,7 +36,7 @@ public class Frame extends JFrame {
         });
     }
 
-    public Frame() {
+    public Frame() throws IOException {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1000, 800); // ridotto leggermente per stare nello schermo
 
@@ -42,17 +46,17 @@ public class Frame extends JFrame {
         
         GameWorld world = new GameWorld(tileSize);
         
-        Player player = new Player("ez", 100, 1, 25*tileSize, 25*tileSize, tileSize, tileSize, "Player");
+        Player player = new Player("ez", 100, 1, 25*tileSize, 25*tileSize, tileSize, tileSize, ImageIO.read(getClass().getResource("/Player.png")));
         
         MapPanel mapPanel = new MapPanel(keyH, world, player);
         setContentPane(mapPanel);
-
-        
         
         // Ciclo di gioco a ~60 FPS per aggiornare posizione e schermo
         javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
-        	mapPanel.repaint();
-        	player.updatePlayer(keyH, world);
+        	
+        	player.updatePlayer(keyH, world, this);
+			this.getContentPane().revalidate();
+			this.getContentPane().repaint();
         });
         timer.start();
     }

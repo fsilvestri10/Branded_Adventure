@@ -22,17 +22,17 @@ public class GameWorld {
 	private BufferedImage grass;
 	private BufferedImage subGrass;
 	
-	
 	public GameWorld(int tileSize) {
 		this.enemyCount = 0;
 		this.tileSize = tileSize;
 		objectHitbox = new ArrayList<>();
 		rnd = new Random();
 		map = new int[50][50];
-		generateMap();
+		
 		try {
 			this.grass = ImageIO.read(getClass().getResource("/Grass.png"));
 			this.subGrass = this.grass.getSubimage(32, 96, 16, 16);
+			generateMap();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -54,89 +54,59 @@ public class GameWorld {
                 int screenX = tileWorldX - player.getPlayerX() + screenCenterX;
                 int screenY = tileWorldY - player.getPlayerY() + screenCenterY;
 
-                // OTTIMIZZAZIONE: Disegna la casella solo se è visibile a schermo
-                //if (screenX + tileSize > 0 && screenX < getWidth() &&
-                //    screenY + tileSize > 0 && screenY < getHeight()) {
-
-                	switch(map[x][y]) {
-                		case 0, 2, 3:
-                			g2.setColor(new Color(0, 143, 57));
-							g2.drawImage(this.subGrass, screenX, screenY, this.tileSize, this.tileSize, null);
-							
-                			break;
-                		case 1:
-                			
-                			break;
-                	}
-                	//g2.fillRect(screenX, screenY, tileSize, tileSize);  
-                    g2.setColor(Color.BLACK);
-                    //g2.drawRect(screenX, screenY, tileSize, tileSize);
-                //}
+                if(map[x][y] != 1) g2.drawImage(this.subGrass, screenX, screenY, this.tileSize, this.tileSize, null);
+                
+                g2.setColor(Color.BLACK);
             }
         }
-        
-        this.checkEnemy();
+        try {
+			this.checkEnemy();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         
         // ====================================
-        // DISEGNO DEGLI ALBERI
+        // DISEGNO DEGLI OGGETTI
         // ====================================
     	for(WorldObject object : this.objectHitbox) {
     		object.draw(g2, player.getPlayerX(), player.getPlayerY(), screenCenterX, screenCenterY);
     	}
 	}
 	
-	public void generateMap() {
+	public void generateMap() throws IOException {
 		for(int i = 0; i < 50; i++) {
             for(int j = 0; j < 50; j++) {
                 if(j == 49 || j == 9 || (j<9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) || (i == 0 || i == 49) && j > 9) {
                     map[i][j] = 1;
-                    this.objectHitbox.add(new Wall(i*this.tileSize, j*this.tileSize, this.tileSize, this.tileSize, "Wall"));
+                    this.objectHitbox.add(new Wall(i*this.tileSize, j*this.tileSize, this.tileSize, this.tileSize, ImageIO.read(getClass().getResource("/Wall.png"))));
                 } else {
                     map[i][j] = 0;
-                    
                 }
             }
         }
-        
-        for(int i = 0; i < 10; i++) if(!this.putTree()) i--;
+		
+		// posiziono nemici, alberi e cespugli
+		for(int i = 0; i < 10; i++) if(!this.putObject(2, new Tree(this.rnd.nextInt(2,48)*this.tileSize, this.rnd.nextInt(11,48)*this.tileSize, this.tileSize , this.tileSize, ImageIO.read(getClass().getResource("/Tree.png"))))) i--;
+		for(int i = 0; i < 30; i++) if(!this.putObject(4, new Bush(this.rnd.nextInt(2,48)*this.tileSize+10, this.rnd.nextInt(11,48)*this.tileSize+10, this.tileSize-20, this.tileSize-20, this.grass))) i--;
         this.checkEnemy();
 	}
-	private void checkEnemy() {
+	private void checkEnemy() throws IOException {
 		while(this.enemyCount < 5) {
-        	if(!this.spawnEnemy()) this.enemyCount--;
+        	if(!this.putObject(3, new Enemy("pus", 10, 2, this.rnd.nextInt(14,36)*this.tileSize, this.rnd.nextInt(23,36)*this.tileSize, this.tileSize , this.tileSize, ImageIO.read(getClass().getResource("/Enemy.png"))))) this.enemyCount--;
         	this.enemyCount++;
         }
 	}
-	
-	private boolean putTree() {
-    	int posX = this.rnd.nextInt(2,48);
-    	int posY = this.rnd.nextInt(11,48);
-    	
-    	if(this.map[posX][posY] == 0) {
-    		this.map[posX][posY] = 2;
-    		this.objectHitbox.add(new Tree(posX*this.tileSize, posY*this.tileSize, this.tileSize , this.tileSize, "Tree"));
+	private boolean putObject(int objectNum, WorldObject object) {
+    	if(this.map[object.getX()/this.tileSize][object.getY()/this.tileSize] == 0) {
+    		this.map[object.getX()/this.tileSize][object.getY()/this.tileSize] = objectNum;
+    		this.objectHitbox.add(object);
     		return true;
     	} else {
     		return false;
     	}
-    	
-    }
-	
-    private boolean spawnEnemy() {
-    	
-    	int posX = this.rnd.nextInt(14,36);
-    	int posY = this.rnd.nextInt(23,36);
-    	
-    	if(this.map[posX][posY] == 0) {
-    		this.map[posX][posY] = 3;
-    		this.objectHitbox.add(new Enemy("pus", 10, 2, posX*this.tileSize, posY*this.tileSize, this.tileSize , this.tileSize, "Enemy"));
-    		return true;
-    	} else {
-    		return false;
-    	}
-    }
-    
+	}
 	public ArrayList<WorldObject> getObject() {
 		return this.objectHitbox;
 	}
+	
 }

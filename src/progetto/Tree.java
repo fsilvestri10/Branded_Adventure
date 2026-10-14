@@ -2,14 +2,15 @@ package progetto;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 public class Tree extends WorldObject{
 	
-	public Tree(int tileWorldX, int tileWorldY, int width, int height, String imageId) {
-		super(tileWorldX, tileWorldY, width, height, imageId);
+	public Tree(int tileWorldX, int tileWorldY, int width, int height, BufferedImage image) {
+		super(tileWorldX, tileWorldY, width, height, image);
 		
 	}
 
