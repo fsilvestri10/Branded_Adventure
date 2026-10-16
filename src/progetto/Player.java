@@ -22,8 +22,8 @@ public class Player extends Character {
     
     private Sprite sprite;
 	
-	public Player(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height, BufferedImage image) {
-		super(name, totalHP, level, tileWorldX, tileWorldY, width, height, image);
+	public Player(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height, BufferedImage image, BufferedImage fightingSprite) {
+		super(name, totalHP, level, tileWorldX, tileWorldY, width, height, image, fightingSprite);
 		
 		// Istanza e popolamento degli array per animazioni
 		this.sprite = new Sprite(image);
@@ -44,23 +44,16 @@ public class Player extends Character {
         }
 	}
 	
-	public void drawBattle(Graphics2D g2, int width, int height, int screenWidth, int screenHeight) {
-		/*
-		this.currentSprite = this.sprite.getWalkRightSprite();
-		if (this.getBattleX() <= screenCenterX) {
-			this.setBattleX(this.getBattleX()+MOVEMENT_SPEED);
-			g2.drawImage(this.currentSprite, this.getBattleX(), screenCenterY, width, height, null);
-		}
-		else {
-			g2.drawImage(this.currentSprite, this.getBattleX(), screenCenterY, width, height, null);
-		}*/
+	public void drawBattle(Graphics2D g2, int screenWidth, int screenHeight) {
+		
 		g2.drawImage(this.sprite.getCombatSprite(), 0, screenHeight - screenHeight/5, screenHeight/5, screenHeight/5, null);
 		g2.fillRect(screenWidth/5, screenHeight - screenHeight/10, screenWidth/3, screenHeight/10);
 		g2.setColor(Color.GREEN);
 		g2.fillRect(screenWidth/5 + 15, screenHeight - screenHeight/10 + 15, screenWidth/3 - 30, screenHeight/10 - 30);
 		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/30));
 		g2.drawString("HP", screenWidth/5 - screenWidth/20, screenHeight - screenHeight/10 + screenHeight/15);
-		
+		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/20));
+		g2.drawString(this.getCurrentHP() + "/" + this.getTotalHP(), screenWidth/5 + screenHeight/10, screenHeight - screenHeight/10 - 20);
 	}
 	
 	public WorldObject updatePlayer(KeyHandler keyH, GameWorld world, JFrame frame) {

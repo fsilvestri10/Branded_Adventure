@@ -36,7 +36,7 @@ public class FightPanel extends JPanel {
 		g2.setColor(new Color(0, 0, 0, 128));
 		g2.fillRect(0, getHeight()-getHeight()/5, getWidth(), getHeight()/5);
 		
-		this.player.drawBattle(g2, 100, 100, getWidth(), getHeight());
-		this.enemy.drawBattle(g2, 100, 100, getWidth()*3/4, getHeight()/2);
+		this.player.drawBattle(g2, getWidth(), getHeight());
+		this.enemy.drawBattle(g2, getWidth(), getHeight());
 	}
 }

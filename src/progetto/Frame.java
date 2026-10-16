@@ -46,7 +46,7 @@ public class Frame extends JFrame {
         
         GameWorld world = new GameWorld(tileSize);
         
-        Player player = new Player("ez", 100, 1, 25*tileSize, 25*tileSize, tileSize, tileSize, ImageIO.read(getClass().getResource("/Player.png")));
+        Player player = new Player("ez", 100, 1, 25*tileSize, 25*tileSize, tileSize, tileSize, ImageIO.read(getClass().getResource("/Player.png")), ImageIO.read(getClass().getResource("/Player.png")));
         
         MapPanel mapPanel = new MapPanel(keyH, world, player);
         setContentPane(mapPanel);

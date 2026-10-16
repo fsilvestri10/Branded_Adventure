@@ -92,7 +92,7 @@ public class GameWorld {
 	}
 	private void checkEnemy() throws IOException {
 		while(this.enemyCount < 5) {
-        	if(!this.putObject(3, new Enemy("pus", 10, 2, this.rnd.nextInt(14,36)*this.tileSize, this.rnd.nextInt(23,36)*this.tileSize, this.tileSize , this.tileSize, ImageIO.read(getClass().getResource("/Enemy.png"))))) this.enemyCount--;
+        	if(!this.putObject(3, new Enemy("pus", 10, 2, this.rnd.nextInt(14,36)*this.tileSize, this.rnd.nextInt(23,36)*this.tileSize, this.tileSize , this.tileSize, ImageIO.read(getClass().getResource("/Enemy.png")), ImageIO.read(getClass().getResource("/EnemyFight.png"))))) this.enemyCount--;
         	this.enemyCount++;
         }
 	}

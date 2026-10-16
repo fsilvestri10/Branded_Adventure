@@ -15,8 +15,9 @@ public abstract class Character extends WorldObject {
 	private ArrayList<Item> equipment;
 	private ArrayList<Skill> skills;
 	private int status;
+	protected BufferedImage fightingSprite;
 	
-	public Character(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height, BufferedImage image) {
+	public Character(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height, BufferedImage image, BufferedImage fSprite) {
 		super(tileWorldX, tileWorldY, width, height, image);
 		this.name = name;
 		this.level = level;
@@ -27,9 +28,22 @@ public abstract class Character extends WorldObject {
 		this.equipment = new ArrayList<>();
 		this.skills = new ArrayList<>();
 		this.status = 0;
+		this.fightingSprite = fSprite;
 	}
 	
 	public abstract void attack();
 	
-	public abstract void drawBattle(Graphics2D g2, int width, int height, int screenCenterX, int screenCenterY);
+	public abstract void drawBattle(Graphics2D g2, int screenCenterX, int screenCenterY);
+	public int getTotalHP() {
+		return this.totalHP;
+	}
+	public int getCurrentHP() {
+		return this.currentHP;
+	}
+	public int getLevel() {
+		return this.level;
+	}
+	public BufferedImage getFightingSprite() {
+		return this.fightingSprite;
+	}
 }
