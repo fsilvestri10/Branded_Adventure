@@ -1,6 +1,6 @@
 package progetto;
 
-public abstract class Item {
+public class Item {
 	private String name;
 	private int value;
 	
@@ -9,4 +9,7 @@ public abstract class Item {
 		this.value = value;
 	}
 	
+	public int getValue() {
+		return this.value;
+	}
 }

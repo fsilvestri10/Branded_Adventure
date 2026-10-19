@@ -1,6 +1,7 @@
 package progetto;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -25,7 +26,7 @@ public class Enemy extends Character {
 		//this.fightingSprite = this.image.getSubimage(32, 0*32, 32, 32);
 	}
 	
-	public void attack() {
+	public void attack(Character player) {
 		
 	}
 	
@@ -45,11 +46,20 @@ public class Enemy extends Character {
         g2.drawRect(screenX-10, screenY-10, width+20, height+20);
 	}
 	
-	public void drawBattle(Graphics2D g2, int screenCenterX, int screenCenterY) {
+	public void drawBattle(Graphics2D g2, int screenWidth, int screenHeight) {
 		//this.currentSprite = this.image.getSubimage(32, 1*32, 32, 32);
 		//g2.drawImage(this.currentSprite, screenCenterX, screenCenterY, width, height, null);
 		
-		g2.drawImage(this.getFightingSprite(), screenCenterX/2 - screenCenterX/6, screenCenterY/4, screenCenterX/3, screenCenterY/2, null);
+		g2.drawImage(this.getFightingSprite(), screenWidth/2 - screenWidth/6, screenHeight/4, screenWidth/3, screenHeight/2, null);
+		
+		g2.setColor(Color.GREEN);
+		g2.fillRect(screenWidth/5 + 15, screenHeight - screenHeight/10 + 15, screenWidth/3 - 30, screenHeight/10 - 30);
+		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/30));
+		g2.drawString("HP", screenWidth/5 - screenWidth/20, screenHeight - screenHeight/10 + screenHeight/15);
+		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/20));
+		g2.drawString(this.getCurrentHP() + "/" + this.getTotalHP(), screenWidth/2 - screenWidth/6, screenHeight/5);
+		double percentHP = (double)this.getCurrentHP() / this.getTotalHP();
+		g2.fillRect(screenWidth/2 + 15, screenHeight - screenHeight/2 + 15, (int)(screenWidth/3 * percentHP), screenHeight/10 - 30);
 	}
 	
 	public Rectangle getInteractRange() {

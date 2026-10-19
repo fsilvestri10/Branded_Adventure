@@ -10,8 +10,6 @@ public abstract class Character extends WorldObject {
 	private int totalHP;
 	private int currentHP;
 	private int strength;
-	private int speed;
-	private int resistance;
 	private ArrayList<Item> equipment;
 	private ArrayList<Skill> skills;
 	private int status;
@@ -24,14 +22,15 @@ public abstract class Character extends WorldObject {
 		this.totalHP = totalHP;
 		this.currentHP = totalHP;
 		this.strength = level*3;
-		this.speed = level*3;
 		this.equipment = new ArrayList<>();
 		this.skills = new ArrayList<>();
 		this.status = 0;
 		this.fightingSprite = fSprite;
+		this.equipment.add(0, ItemDatabase.getSword());
+		this.equipment.add(1, ItemDatabase.getArmor());
 	}
 	
-	public abstract void attack();
+	public abstract void attack(Character character);
 	
 	public abstract void drawBattle(Graphics2D g2, int screenCenterX, int screenCenterY);
 	public int getTotalHP() {
@@ -45,5 +44,17 @@ public abstract class Character extends WorldObject {
 	}
 	public BufferedImage getFightingSprite() {
 		return this.fightingSprite;
+	}
+	public ArrayList<Skill> getSkills() {
+		return this.skills;
+	}
+	protected void setCurrentHP(int currentHP) {
+		this.currentHP = currentHP;
+	}
+	public int getStrength() {
+		return this.strength;
+	}
+	public Item getEquipment(int i) {
+		return this.equipment.get(i);
 	}
 }

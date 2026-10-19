@@ -7,11 +7,11 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Player extends Character {
 	private static int MOVEMENT_SPEED = 10;
 	
-	private int battleX = 0;
 	private int playerSide = 1;
 	private int exp;
 	private int gold;
@@ -27,10 +27,11 @@ public class Player extends Character {
 		
 		// Istanza e popolamento degli array per animazioni
 		this.sprite = new Sprite(image);
+		
 	}
 	
-	public void attack() {
-		
+	public void attack(Character enemy) {
+		enemy.setCurrentHP((enemy.getCurrentHP() + enemy.getEquipment(1).getValue()) - (this.getStrength() + this.getEquipment(0).getValue()));
 	}
 	
 	public void draw(Graphics2D g2, int playerX, int playerY, int screenCenterX, int screenCenterY) {
@@ -49,11 +50,13 @@ public class Player extends Character {
 		g2.drawImage(this.sprite.getCombatSprite(), 0, screenHeight - screenHeight/5, screenHeight/5, screenHeight/5, null);
 		g2.fillRect(screenWidth/5, screenHeight - screenHeight/10, screenWidth/3, screenHeight/10);
 		g2.setColor(Color.GREEN);
-		g2.fillRect(screenWidth/5 + 15, screenHeight - screenHeight/10 + 15, screenWidth/3 - 30, screenHeight/10 - 30);
+		g2.fillRect(screenWidth/5 + 15, screenHeight - screenHeight/10 + 15, screenWidth/3*(this.getCurrentHP()/this.getTotalHP()) - 30, screenHeight/10 - 30);
 		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/30));
 		g2.drawString("HP", screenWidth/5 - screenWidth/20, screenHeight - screenHeight/10 + screenHeight/15);
 		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/20));
 		g2.drawString(this.getCurrentHP() + "/" + this.getTotalHP(), screenWidth/5 + screenHeight/10, screenHeight - screenHeight/10 - 20);
+		
+		
 	}
 	
 	public WorldObject updatePlayer(KeyHandler keyH, GameWorld world, JFrame frame) {
@@ -136,11 +139,5 @@ public class Player extends Character {
 	}
 	public int getCollisionInfo() {
 		return this.collisionInfo;
-	}
-	public int getBattleX() {
-		return this.battleX;
-	}
-	private void setBattleX(int n) {
-		this.battleX = n;	
 	}
 }

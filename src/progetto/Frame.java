@@ -53,8 +53,8 @@ public class Frame extends JFrame {
         
         // Ciclo di gioco a ~60 FPS per aggiornare posizione e schermo
         javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+        	if(this.getContentPane().equals(mapPanel)) player.updatePlayer(keyH, world, this);
         	
-        	player.updatePlayer(keyH, world, this);
 			this.getContentPane().revalidate();
 			this.getContentPane().repaint();
         });
