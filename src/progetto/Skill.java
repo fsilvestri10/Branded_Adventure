@@ -14,4 +14,7 @@ public class Skill {
 	public String getName() {
 		return this.name;
 	}
+	public int getPower() {
+		return this.power;
+	}
 }

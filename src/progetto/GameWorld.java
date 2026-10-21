@@ -21,6 +21,7 @@ public class GameWorld {
 	private int enemyCount;
 	private BufferedImage grass;
 	private BufferedImage subGrass;
+	private int enemyId = 4;
 	
 	public GameWorld(int tileSize) {
 		this.enemyCount = 0;
@@ -38,7 +39,7 @@ public class GameWorld {
 			e.printStackTrace();
 		}
 	}
-	public void draw(Graphics2D g2, Player player, int screenCenterX, int screenCenterY) {
+	protected void draw(Graphics2D g2, Player player, int screenCenterX, int screenCenterY) {
 		
         // ====================================
         // DISEGNO DELLA MAPPA (Spostata rispetto al Player)
@@ -73,7 +74,7 @@ public class GameWorld {
     	}
 	}
 	
-	public void generateMap() throws IOException {
+	protected void generateMap() throws IOException {
 		for(int i = 0; i < 50; i++) {
             for(int j = 0; j < 50; j++) {
                 if(j == 49 || j == 9 || (j<9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) || (i == 0 || i == 49) && j > 9) {
@@ -86,16 +87,23 @@ public class GameWorld {
         }
 		
 		// posiziono nemici, alberi e cespugli
+		this.putObject(5, new Enemy(0, "Skeleton Boss", 100 , 5, 2*this.tileSize, 13*this.tileSize, this.tileSize, this.tileSize,ImageIO.read(getClass().getResource("/Boss1.png")), ImageIO.read(getClass().getResource("/Boss1Fight.png"))));
+		this.putObject(5, new Enemy(1, "Skeleton Boss", 100 , 5, 2*this.tileSize, 13*this.tileSize, this.tileSize, this.tileSize,ImageIO.read(getClass().getResource("/Boss1.png")), ImageIO.read(getClass().getResource("/Boss1Fight.png"))));
+		this.putObject(5, new Enemy(2, "Skeleton Boss", 100 , 5, 2*this.tileSize, 13*this.tileSize, this.tileSize, this.tileSize,ImageIO.read(getClass().getResource("/Boss1.png")), ImageIO.read(getClass().getResource("/Boss1Fight.png"))));
+		this.putObject(5, new Enemy(3, "Skeleton Boss", 100 , 5, 2*this.tileSize, 13*this.tileSize, this.tileSize, this.tileSize,ImageIO.read(getClass().getResource("/Boss1.png")), ImageIO.read(getClass().getResource("/Boss1Fight.png"))));
 		for(int i = 0; i < 10; i++) if(!this.putObject(2, new Tree(this.rnd.nextInt(2,48)*this.tileSize, this.rnd.nextInt(11,48)*this.tileSize, this.tileSize , this.tileSize, ImageIO.read(getClass().getResource("/Tree.png"))))) i--;
 		for(int i = 0; i < 30; i++) if(!this.putObject(4, new Bush(this.rnd.nextInt(2,48)*this.tileSize+10, this.rnd.nextInt(11,48)*this.tileSize+10, this.tileSize-20, this.tileSize-20, this.grass))) i--;
         this.checkEnemy();
 	}
+	
 	private void checkEnemy() throws IOException {
 		while(this.enemyCount < 5) {
-        	if(!this.putObject(3, new Enemy("pus", 10, 2, this.rnd.nextInt(14,36)*this.tileSize, this.rnd.nextInt(23,36)*this.tileSize, this.tileSize , this.tileSize, ImageIO.read(getClass().getResource("/Enemy.png")), ImageIO.read(getClass().getResource("/EnemyFight.png"))))) this.enemyCount--;
+        	if(!this.putObject(3, new Enemy(this.enemyId, "pus", 10, 2, this.rnd.nextInt(14,36)*this.tileSize, this.rnd.nextInt(23,36)*this.tileSize, this.tileSize , this.tileSize, ImageIO.read(getClass().getResource("/Enemy.png")), ImageIO.read(getClass().getResource("/EnemyFight.png"))))) this.enemyCount--;
         	this.enemyCount++;
+        	this.enemyId++;
         }
 	}
+	
 	private boolean putObject(int objectNum, WorldObject object) {
     	if(this.map[object.getX()/this.tileSize][object.getY()/this.tileSize] == 0) {
     		this.map[object.getX()/this.tileSize][object.getY()/this.tileSize] = objectNum;
@@ -105,8 +113,13 @@ public class GameWorld {
     		return false;
     	}
 	}
+	
 	public ArrayList<WorldObject> getObject() {
 		return this.objectHitbox;
 	}
 	
+	protected void removeEnemy(WorldObject enemy) {
+		this.objectHitbox.remove(enemy);
+		this.enemyCount--;
+	}
 }

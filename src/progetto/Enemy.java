@@ -18,16 +18,20 @@ public class Enemy extends Character {
 	private BufferedImage currentSprite;
 	private int spriteChange = 60;
 	private int spriteCounter = 60;
+	private int id;
 	
-	public Enemy(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height, BufferedImage image, BufferedImage fighingSprite) {
+	public Enemy(int id, String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height, BufferedImage image, BufferedImage fighingSprite) {
 		super(name, totalHP, level, tileWorldX, tileWorldY, width, height, image, fighingSprite);
 		this.interactRange = new Rectangle(this.tileWorldX-10, this.tileWorldY-10, this.width+20, this.height+20);
 		this.rnd = new Random();
-		//this.fightingSprite = this.image.getSubimage(32, 0*32, 32, 32);
+		this.id = id;
+		this.expDrop = this.getLevel() *10;
+		this.goldDrop = this.getLevel() *100;
 	}
 	
 	public void attack(Character player) {
 		
+		player.setCurrentHP((player.getCurrentHP() + player.getEquipment(1).getValue()) - (this.getStrength() + this.getEquipment(0).getValue()));
 	}
 	
 	public void draw(Graphics2D g2, int playerX, int playerY, int screenCenterX, int screenCenterY) {
@@ -53,16 +57,27 @@ public class Enemy extends Character {
 		g2.drawImage(this.getFightingSprite(), screenWidth/2 - screenWidth/6, screenHeight/4, screenWidth/3, screenHeight/2, null);
 		
 		g2.setColor(Color.GREEN);
+		/*
 		g2.fillRect(screenWidth/5 + 15, screenHeight - screenHeight/10 + 15, screenWidth/3 - 30, screenHeight/10 - 30);
 		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/30));
 		g2.drawString("HP", screenWidth/5 - screenWidth/20, screenHeight - screenHeight/10 + screenHeight/15);
 		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/20));
 		g2.drawString(this.getCurrentHP() + "/" + this.getTotalHP(), screenWidth/2 - screenWidth/6, screenHeight/5);
+		*/
 		double percentHP = (double)this.getCurrentHP() / this.getTotalHP();
-		g2.fillRect(screenWidth/2 + 15, screenHeight - screenHeight/2 + 15, (int)(screenWidth/3 * percentHP), screenHeight/10 - 30);
+		g2.fillRect(screenWidth/2 - screenWidth/6, screenHeight/5, (int)(screenWidth/3 * percentHP), screenHeight/10 - 30);
 	}
 	
 	public Rectangle getInteractRange() {
 		return this.interactRange;
+	}
+	public int getId() {
+		return this.id;
+	}
+	public int getExp() {
+		return this.expDrop;
+	}
+	public int getGold() {
+		return this.goldDrop;
 	}
 }

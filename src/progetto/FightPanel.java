@@ -7,11 +7,18 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
@@ -22,17 +29,36 @@ public class FightPanel extends JPanel {
 	
 	private Player player;
 	private Enemy enemy;
+	private JFrame frame;
+	private MapPanel mapPanel;
 	
 	private JButton attack = new JButton("Attacca");
 	private JButton skills = new JButton("Abilità");
 	private JButton[] skillButtons = new JButton[4];
 	
-	private boolean checkButtons = true;
+	private boolean playersTurn = true; // true -> turno del player		false -> turno del nemico
 	private boolean skillsOpened = false;
+	private AudioInputStream audioInputStream;
+	private Clip clip;
 	
-	public FightPanel(Player player, Enemy enemy) {
+	public FightPanel(Player player, Enemy enemy, JFrame frame, MapPanel mapPanel) {
+		
+			try {
+				this.audioInputStream = AudioSystem.getAudioInputStream(new File("resources/fight.wav").getAbsoluteFile());
+				this.clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
+		clip.start();
+		
 		this.enemy = enemy;
 		this.player = player;
+		this.frame = frame;
+		this.mapPanel = mapPanel;
 		try {
 			this.backgroundImage = ImageIO.read(getClass().getResource("/Background.png"));
 		} catch (IOException e) {
@@ -41,10 +67,13 @@ public class FightPanel extends JPanel {
 		this.attack.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        player.attack(enemy);
+		        if(playersTurn) {
+		        	player.attack(enemy);
+		        	playersTurn = false;
+		        }
 		    }
 		});
-		skills.addActionListener(new ActionListener() {
+		this.skills.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        skillsPressed(attack, skills);
@@ -54,9 +83,23 @@ public class FightPanel extends JPanel {
 		this.add(skills);
 		
 		for(int i = 0; i < skillButtons.length; i++) {
-			if(this.player.getSkills().size() > i) skillButtons[i] = new JButton(this.player.getSkills().get(i).getName());
-			else skillButtons[i] = new JButton("???");
+			if(this.player.getSkills().size() > i) {
+				skillButtons[i] = new JButton(this.player.getSkills().get(i).getName());
+				this.addActionListener(i);
+			} else skillButtons[i] = new JButton("???");
+			
 		}
+	}
+	private void addActionListener(int i) {
+		this.skillButtons[i].addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	if(playersTurn) {
+		    		player.useSkill(i, enemy);
+		    		playersTurn = false;
+		    	}
+		    }
+		});
 	}
 	
 	protected void paintComponent(Graphics g) {
@@ -71,31 +114,42 @@ public class FightPanel extends JPanel {
 		this.player.drawBattle(g2, getWidth(), getHeight());
 		this.enemy.drawBattle(g2, getWidth(), getHeight());
 		
-		attack.setBackground(new Color(59, 89, 182));
-        attack.setForeground(Color.WHITE);
-        attack.setFocusPainted(false);
-        attack.setFont(new Font("Algerian", Font.BOLD, 20));
-		attack.setBounds(getWidth()-getWidth()/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5);
-		attack.setVisible(true);
+		//tasti skills e attack
+		this.setButton(attack, getWidth()-getWidth()/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5, new Color(59, 89, 182), Color.WHITE);
+		this.setButton(skills, getWidth()-getWidth()*2/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5, new Color(59, 89, 182), Color.WHITE);
 		
-		
-		skills.setBounds(getWidth()-getWidth()*2/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5);
-		skills.setBackground(new Color(59, 89, 182));
-        skills.setForeground(Color.WHITE);
-        skills.setFocusPainted(false);
-        skills.setFont(new Font("Tahoma", Font.BOLD, 20));
-		skills.setVisible(true);
-		
+		//mostra le varie skill se premuto skill
 		for(int i = 0; i < skillButtons.length; i++) {
 			if(this.skillButtons[i] != null && this.skillButtons[i].isVisible()) {
-				skillButtons[i].setBounds(getWidth()-getWidth()*2/5, getHeight()-getHeight()/5-getHeight()*(i+1)/20, getWidth()/5, getHeight()/20);
-				skillButtons[i].setBackground(new Color(59, 89, 182));
-		        skillButtons[i].setForeground(Color.WHITE);
-		        skillButtons[i].setFocusPainted(false);
-		        skillButtons[i].setFont(new Font("Tahoma", Font.BOLD, 20));
-				skillButtons[i].setVisible(true);
+				this.setButton(this.skillButtons[i], getWidth()-getWidth()*2/5, getHeight()-getHeight()/5-getHeight()*(i+1)/20, getWidth()/5, getHeight()/20, new Color(59, 89, 182), Color.WHITE);
+				
 			}
 		}
+		if(this.enemy.getCurrentHP() <= 0) {
+			this.frame.setContentPane(this.mapPanel);
+			this.mapPanel.requestFocus();
+			if(this.enemy.getId() < 4) {
+				this.enemy.setSkill(SkillDatabase.getHeal());
+				this.player.learnSkill(this.enemy.getSkills().get(0));
+			}
+			this.clip.stop();
+			this.player.giveExp(this.enemy.getExp());
+			this.player.giveGold(this.enemy.getGold());
+			this.player.setCurrentHP(this.player.getCurrentHP()+this.player.getTotalHP()/4);
+		} else {
+			if(!this.playersTurn) {
+				this.enemy.attack(player);
+				this.playersTurn = true;
+			}
+		}
+	}
+	private void setButton(JButton button, int xPos, int yPos, int width, int height, Color backgroundColor, Color String) {
+		button.setBounds(xPos, yPos, width, height);
+		button.setBackground(backgroundColor);
+		button.setForeground(String);
+		button.setFocusPainted(false);
+		button.setFont(new Font("Tahoma", Font.BOLD, 20));
+		button.setVisible(true);
 	}
 	private void skillsPressed(JButton attack, JButton skills) {
 		if (!this.skillsOpened) this.skillsOpened = true;
@@ -108,5 +162,5 @@ public class FightPanel extends JPanel {
 				this.add(skillButtons[i]);
 			}
 		}
-	}				
+	}
 }

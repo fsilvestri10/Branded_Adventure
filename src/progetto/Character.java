@@ -49,12 +49,22 @@ public abstract class Character extends WorldObject {
 		return this.skills;
 	}
 	protected void setCurrentHP(int currentHP) {
-		this.currentHP = currentHP;
+		if(currentHP > this.totalHP) this.currentHP = this.totalHP;
+		else this.currentHP = currentHP;
 	}
 	public int getStrength() {
 		return this.strength;
 	}
 	public Item getEquipment(int i) {
 		return this.equipment.get(i);
+	}
+	protected void setSkill(Skill skill) {
+		this.skills.add(skill);
+	}
+	protected void levelUp() {
+		this.level++;
+	}
+	protected void updateStrength() {
+		this.strength = this.level*3;
 	}
 }

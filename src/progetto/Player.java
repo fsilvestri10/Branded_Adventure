@@ -41,8 +41,16 @@ public class Player extends Character {
         
         if(this.collisionInfo == 1) {
         	g2.setColor(Color.BLACK);
-        	g2.drawString("ez", screenCenterX+18, screenCenterY);
+        	g2.drawString("E per combattere", screenCenterX+18, screenCenterY);
         }
+        g2.setFont(new Font("sanserif", Font.BOLD, 15));
+        g2.drawString("[ LV. " + this.getLevel() + " ]", screenCenterX + 5, screenCenterY - 10);
+        
+        g2.setColor(new Color(0, 0, 0, 128));
+        g2.fillRect(playerX, screenCenterY*2 - screenCenterY/10, screenCenterX/3, screenCenterY/10);
+        g2.setColor(Color.YELLOW);
+        g2.setFont(new Font("sanserif", Font.BOLD, 25));
+        g2.drawString("Gold: " + this.gold, playerX, screenCenterY*2);
 	}
 	
 	public void drawBattle(Graphics2D g2, int screenWidth, int screenHeight) {
@@ -50,16 +58,16 @@ public class Player extends Character {
 		g2.drawImage(this.sprite.getCombatSprite(), 0, screenHeight - screenHeight/5, screenHeight/5, screenHeight/5, null);
 		g2.fillRect(screenWidth/5, screenHeight - screenHeight/10, screenWidth/3, screenHeight/10);
 		g2.setColor(Color.GREEN);
-		g2.fillRect(screenWidth/5 + 15, screenHeight - screenHeight/10 + 15, screenWidth/3*(this.getCurrentHP()/this.getTotalHP()) - 30, screenHeight/10 - 30);
+		double percentHP = (double)this.getCurrentHP() / this.getTotalHP();
+		g2.fillRect(screenWidth/5 + 15, screenHeight - screenHeight/10 + 15, (int)(screenWidth/3 * percentHP) - 30, screenHeight/10 - 30);
 		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/30));
 		g2.drawString("HP", screenWidth/5 - screenWidth/20, screenHeight - screenHeight/10 + screenHeight/15);
 		g2.setFont(new Font("sanserif", Font.BOLD, screenWidth/20));
 		g2.drawString(this.getCurrentHP() + "/" + this.getTotalHP(), screenWidth/5 + screenHeight/10, screenHeight - screenHeight/10 - 20);
 		
-		
 	}
 	
-	public WorldObject updatePlayer(KeyHandler keyH, GameWorld world, JFrame frame) {
+	public void updatePlayer(KeyHandler keyH, GameWorld world, JFrame frame, MapPanel mapPanel) {
 		this.collisionInfo = 0;
 		this.isMoving = false;
 		int nextX = 0;
@@ -93,8 +101,10 @@ public class Player extends Character {
 
         for (WorldObject object : world.getObject()) {
 	        if (Enemy.class.isInstance(object)) {
-	        	if(((Enemy)object).getInteractRange().intersects(this.getPlayerHitbox())) this.collisionInfo = 1;
-	        	collidingObject = object;
+	        	if(((Enemy)object).getInteractRange().intersects(this.getPlayerHitbox())) {
+	        		this.collisionInfo = 1;
+	        		collidingObject = object;
+	        	}
 	        } 
         }
         
@@ -104,12 +114,18 @@ public class Player extends Character {
         	this.sprite.setSpriteNum(1);
         }
         
-        if(keyH.ePressed && this.collisionInfo == 1) {
-        	FightPanel fightPanel = new FightPanel(this, (Enemy)collidingObject);
-        	frame.setContentPane(fightPanel);
-        	return collidingObject;
+        if(this.exp >= this.getLevel()*20) {
+        	this.levelUp();
+        	this.exp-=this.getLevel()*20;
+        	this.updateStrength();
         }
-        return null;
+        
+        if(keyH.ePressed && this.collisionInfo == 1) {
+        	FightPanel fightPanel = new FightPanel(this, (Enemy)collidingObject, frame, mapPanel);
+        	frame.setContentPane(fightPanel);
+        	keyH.ePressed = false;
+        	world.removeEnemy(collidingObject);
+        }
 	}
 	
 	private boolean checkMovement(int x, int y, GameWorld world) {
@@ -123,7 +139,12 @@ public class Player extends Character {
         }
         return false;
 	}
-	
+	protected void useSkill(int skillN, Enemy enemy) {
+		switch(skillN) {
+			case 0:
+				this.setCurrentHP(this.getCurrentHP()+this.getSkills().get(0).getPower());
+		}
+	}
 	private boolean checkObject(WorldObject object) {
 		if(Enemy.class.isInstance(object) || Tree.class.isInstance(object) || Wall.class.isInstance(object)) return true;
 		return false;
@@ -140,4 +161,14 @@ public class Player extends Character {
 	public int getCollisionInfo() {
 		return this.collisionInfo;
 	}
+	protected void learnSkill(Skill skill) {
+		this.setSkill(skill);
+	}
+	protected void giveExp(int expBonus) {
+		this.exp+=expBonus;
+	}
+	protected void giveGold(int goldBonus) {
+		this.gold+=goldBonus;
+	}
+	
 }

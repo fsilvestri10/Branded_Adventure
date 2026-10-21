@@ -49,14 +49,16 @@ public class Frame extends JFrame {
         Player player = new Player("ez", 100, 1, 25*tileSize, 25*tileSize, tileSize, tileSize, ImageIO.read(getClass().getResource("/Player.png")), ImageIO.read(getClass().getResource("/Player.png")));
         
         MapPanel mapPanel = new MapPanel(keyH, world, player);
+        
         setContentPane(mapPanel);
         
         // Ciclo di gioco a ~60 FPS per aggiornare posizione e schermo
         javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
-        	if(this.getContentPane().equals(mapPanel)) player.updatePlayer(keyH, world, this);
+        	if(this.getContentPane().equals(mapPanel)) player.updatePlayer(keyH, world, this, mapPanel);
         	
 			this.getContentPane().revalidate();
 			this.getContentPane().repaint();
+			//this.getContentPane().requestFocus();
         });
         timer.start();
     }
