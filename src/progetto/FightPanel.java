@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
@@ -41,19 +42,8 @@ public class FightPanel extends JPanel {
 	private AudioInputStream audioInputStream;
 	private Clip clip;
 	
-	public FightPanel(Player player, Enemy enemy, JFrame frame, MapPanel mapPanel) {
-		
-			try {
-				this.audioInputStream = AudioSystem.getAudioInputStream(new File("resources/fight.wav").getAbsoluteFile());
-				this.clip = AudioSystem.getClip();
-				clip.open(audioInputStream);
-			} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		
-		clip.start();
+	public FightPanel(Player player, Enemy enemy, JFrame frame, MapPanel mapPanel) {	
+		startAudio("normal_fight");
 		
 		this.enemy = enemy;
 		this.player = player;
@@ -70,6 +60,7 @@ public class FightPanel extends JPanel {
 		        if(playersTurn) {
 		        	player.attack(enemy);
 		        	playersTurn = false;
+		        	checkEnemy();
 		        }
 		    }
 		});
@@ -97,6 +88,7 @@ public class FightPanel extends JPanel {
 		    	if(playersTurn) {
 		    		player.useSkill(i, enemy);
 		    		playersTurn = false;
+		    		checkEnemy();
 		    	}
 		    }
 		});
@@ -122,24 +114,6 @@ public class FightPanel extends JPanel {
 		for(int i = 0; i < skillButtons.length; i++) {
 			if(this.skillButtons[i] != null && this.skillButtons[i].isVisible()) {
 				this.setButton(this.skillButtons[i], getWidth()-getWidth()*2/5, getHeight()-getHeight()/5-getHeight()*(i+1)/20, getWidth()/5, getHeight()/20, new Color(59, 89, 182), Color.WHITE);
-				
-			}
-		}
-		if(this.enemy.getCurrentHP() <= 0) {
-			this.frame.setContentPane(this.mapPanel);
-			this.mapPanel.requestFocus();
-			if(this.enemy.getId() < 4) {
-				this.enemy.setSkill(SkillDatabase.getHeal());
-				this.player.learnSkill(this.enemy.getSkills().get(0));
-			}
-			this.clip.stop();
-			this.player.giveExp(this.enemy.getExp());
-			this.player.giveGold(this.enemy.getGold());
-			this.player.setCurrentHP(this.player.getCurrentHP()+this.player.getTotalHP()/4);
-		} else {
-			if(!this.playersTurn) {
-				this.enemy.attack(player);
-				this.playersTurn = true;
 			}
 		}
 	}
@@ -162,5 +136,49 @@ public class FightPanel extends JPanel {
 				this.add(skillButtons[i]);
 			}
 		}
+	}
+	
+	private void checkEnemy() {
+		// Controllo se il nemico è sconfitto
+	    if (this.enemy.getCurrentHP() <= 0) {
+	        giveVictory();	// VICTORY!!!!
+	    } else {
+			this.enemy.attack(player);
+			this.playersTurn = true;
+	    }
+	}
+	
+	private void giveVictory() {
+		if(this.enemy.getId() < 4) {
+			this.enemy.setSkill(SkillDatabase.getHeal());
+			this.player.learnSkill(this.enemy.getSkills().get(0));
+		}
+		this.clip.stop();
+		
+		// Rewards
+		this.player.giveExp(this.enemy.getExp());
+		this.player.giveGold(this.enemy.getGold());
+		this.player.setCurrentHP(this.player.getCurrentHP()+this.player.getTotalHP()/4);
+		
+		// Torno alla mappa
+		this.frame.setContentPane(this.mapPanel);
+		this.mapPanel.requestFocus();
+	}
+	
+	private void startAudio(String track) {
+		try {
+			this.audioInputStream = AudioSystem.getAudioInputStream(new File("resources/" + track + ".wav").getAbsoluteFile());
+			this.clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			
+			// Per abbassare il volume un po
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-15);
+			
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	clip.start();
 	}
 }
