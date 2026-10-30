@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,6 @@ public class Enemy extends Character {
 	}
 	
 	public void attack(Character player) {
-		
 		player.setCurrentHP((player.getCurrentHP() + player.getEquipment(1).getValue()) - (this.getStrength() + this.getEquipment(0).getValue()));
 	}
 	
@@ -46,8 +46,10 @@ public class Enemy extends Character {
         }
         
 		g2.drawImage(this.currentSprite, screenX - 6, screenY - 6, this.width + 12, this.height + 12, null);
-        g2.setColor(Color.red);
-        g2.drawRect(screenX-10, screenY-10, width+20, height+20);
+        g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
+        g2.drawString("[ LV. " + this.getLevel() + " ]", screenX - 3, screenY - 7);
+        //g2.setColor(Color.red);
+        //g2.drawRect(screenX-10, screenY-10, width+20, height+20);
 	}
 	
 	public void drawBattle(Graphics2D g2, int screenWidth, int screenHeight) {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 public class Frame extends JFrame {
@@ -53,7 +54,7 @@ public class Frame extends JFrame {
         setContentPane(mapPanel);
         
         // Ciclo di gioco a ~60 FPS per aggiornare posizione e schermo
-        javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+        Timer timer = new Timer(16, e -> {
         	if(this.getContentPane().equals(mapPanel)) player.updatePlayer(keyH, world, this, mapPanel);
         	
 			this.getContentPane().revalidate();

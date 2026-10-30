@@ -20,6 +20,6 @@ public class Tree extends WorldObject{
         int screenY = this.tileWorldY - playerY + screenCenterY;
         if(this.image != null) g2.drawImage(this.image, screenX-20, screenY-20, this.width+40, this.height+40, null);
         
-        g2.drawRect(screenX, screenY, this.width, this.height);				//hitbox alberi per debug
+        //g2.drawRect(screenX, screenY, this.width, this.height);				//hitbox alberi per debug
 	}
 }

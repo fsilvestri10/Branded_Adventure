@@ -43,8 +43,9 @@ public class Player extends Character {
         	g2.setColor(Color.BLACK);
         	g2.drawString("E per combattere", screenCenterX+18, screenCenterY);
         }
-        g2.setFont(new Font("sanserif", Font.BOLD, 15));
-        g2.drawString("[ LV. " + this.getLevel() + " ]", screenCenterX + 5, screenCenterY - 10);
+        g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
+        
+        g2.drawString("[ LV. " + this.getLevel() + " ]", screenCenterX - 3, screenCenterY - 7);
         
         g2.setColor(new Color(0, 0, 0, 128));
         g2.fillRect(playerX, screenCenterY*2 - screenCenterY/10, screenCenterX/3, screenCenterY/10);

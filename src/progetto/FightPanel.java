@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -22,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class FightPanel extends JPanel {
 	
@@ -41,6 +43,7 @@ public class FightPanel extends JPanel {
 	private boolean skillsOpened = false;
 	private AudioInputStream audioInputStream;
 	private Clip clip;
+	private String combatMessage = "È il tuo turno, scegli un'azione!";
 	
 	public FightPanel(Player player, Enemy enemy, JFrame frame, MapPanel mapPanel) {	
 		startAudio("normal_fight");
@@ -49,6 +52,7 @@ public class FightPanel extends JPanel {
 		this.player = player;
 		this.frame = frame;
 		this.mapPanel = mapPanel;
+		this.combatMessage = "È il tuo turno, scegli un'azione!";
 		try {
 			this.backgroundImage = ImageIO.read(getClass().getResource("/Background.png"));
 		} catch (IOException e) {
@@ -58,9 +62,14 @@ public class FightPanel extends JPanel {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        if(playersTurn) {
-		        	player.attack(enemy);
 		        	playersTurn = false;
-		        	checkEnemy();
+		        	combatMessage = "Il giocatore attacca!";
+		        	Timer playerTurnTimer = new Timer(1500, e1 -> {
+			        	player.attack(enemy);
+			        	checkEnemy();
+			    	});
+		        	playerTurnTimer.setRepeats(false); 
+		        	playerTurnTimer.start();
 		        }
 		    }
 		});
@@ -105,18 +114,19 @@ public class FightPanel extends JPanel {
 		
 		this.player.drawBattle(g2, getWidth(), getHeight());
 		this.enemy.drawBattle(g2, getWidth(), getHeight());
+		drawCombatMessage(g2);
 		
 		//tasti skills e attack
-		this.setButton(attack, getWidth()-getWidth()/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5, new Color(59, 89, 182), Color.WHITE);
-		this.setButton(skills, getWidth()-getWidth()*2/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5, new Color(59, 89, 182), Color.WHITE);
-		
+		this.setButton(attack, getWidth()-getWidth()/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5, Color.BLACK, Color.WHITE);
+		this.setButton(skills, getWidth()-getWidth()*2/5, getHeight()-getHeight()/5, getWidth()/5, getHeight()/5, Color.BLACK, Color.WHITE);
 		//mostra le varie skill se premuto skill
 		for(int i = 0; i < skillButtons.length; i++) {
 			if(this.skillButtons[i] != null && this.skillButtons[i].isVisible()) {
-				this.setButton(this.skillButtons[i], getWidth()-getWidth()*2/5, getHeight()-getHeight()/5-getHeight()*(i+1)/20, getWidth()/5, getHeight()/20, new Color(59, 89, 182), Color.WHITE);
+				this.setButton(this.skillButtons[i], getWidth()-getWidth()*2/5, getHeight()-getHeight()/5-getHeight()*(i+1)/20, getWidth()/5, getHeight()/20, Color.BLACK, Color.WHITE);
 			}
 		}
 	}
+	
 	private void setButton(JButton button, int xPos, int yPos, int width, int height, Color backgroundColor, Color String) {
 		button.setBounds(xPos, yPos, width, height);
 		button.setBackground(backgroundColor);
@@ -141,14 +151,22 @@ public class FightPanel extends JPanel {
 	private void checkEnemy() {
 		// Controllo se il nemico è sconfitto
 	    if (this.enemy.getCurrentHP() <= 0) {
-	        giveVictory();	// VICTORY!!!!
-	    } else {
-			this.enemy.attack(player);
-			this.playersTurn = true;
+	        Victory();	// VICTORY!!!!
 	    }
+	    this.combatMessage = "Il nemico attacca!";
+	    Timer enemyTurnTimer = new Timer(1500, e -> {
+			this.enemy.attack(player);
+		    if (this.player.getCurrentHP() <= 0) {
+		        gameOver();
+		    }
+			this.combatMessage = "È il tuo turno, scegli un'azione!";
+			this.playersTurn = true;
+	    });
+	    enemyTurnTimer.setRepeats(false); 
+	    enemyTurnTimer.start();
 	}
 	
-	private void giveVictory() {
+	private void Victory() {
 		if(this.enemy.getId() < 4) {
 			this.enemy.setSkill(SkillDatabase.getHeal());
 			this.player.learnSkill(this.enemy.getSkills().get(0));
@@ -163,6 +181,14 @@ public class FightPanel extends JPanel {
 		// Torno alla mappa
 		this.frame.setContentPane(this.mapPanel);
 		this.mapPanel.requestFocus();
+	}
+	
+	private void drawCombatMessage(Graphics g2) {
+		g2.setColor(new Color(0, 0, 0, 128));
+		g2.fillRect(0, 0, getWidth(), getHeight()/12);
+	    g2.setFont(new Font("Arial", Font.BOLD, 25));
+	    g2.setColor(Color.WHITE);
+	    g2.drawString(combatMessage, 20, getHeight()/20);
 	}
 	
 	private void startAudio(String track) {
@@ -180,5 +206,15 @@ public class FightPanel extends JPanel {
 			e.printStackTrace();
 		}
 	clip.start();
+	}
+	
+	private void gameOver() {
+	    this.clip.stop(); // Ferma la musica di combattimento
+
+	    // Passa alla schermata di Game Over
+	    GameOverPanel GameOverPanel = new GameOverPanel(this.frame, this.mapPanel, this.player);
+	    this.frame.setContentPane(GameOverPanel);
+	    this.frame.revalidate();
+	    this.frame.repaint();
 	}
 }
