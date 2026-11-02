@@ -49,7 +49,7 @@ public class GameWorld {
 
         // posiziono nemici, alberi e cespugli
         this.putObject(5, new Enemy(0, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
-        this.putObject(5, new Enemy(1, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
+        this.putObject(5, new Enemy(1, "Knight Boss", 100, 5, 20 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(2, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         for (int i = 0; i < 10; i++)

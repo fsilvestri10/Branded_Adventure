@@ -22,10 +22,10 @@ public class Sprite {
         this.walkRight = new BufferedImage[3];
 
         for (int i = 0; i < 3; i++) {
-            this.walkUp[i] = image.getSubimage(i * 32, 96, 32, 32);
-            this.walkDown[i] = image.getSubimage(i * 32, 0, 32, 32);
-            this.walkLeft[i] = image.getSubimage(i * 32, 32, 32, 32);
-            this.walkRight[i] = image.getSubimage(i * 32, 64, 32, 32);
+            this.walkUp[i] = image.getSubimage(i * 96, 288, 96, 96);
+            this.walkDown[i] = image.getSubimage(i * 96, 0, 96, 96);
+            this.walkLeft[i] = image.getSubimage(i * 96, 96, 96, 96);
+            this.walkRight[i] = image.getSubimage(i * 96, 192, 96, 96);
         }
     }
 

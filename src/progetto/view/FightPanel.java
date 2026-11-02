@@ -119,7 +119,24 @@ public class FightPanel extends JPanel {
     }
 
     private void drawEnemyBattle(Graphics2D g2, int w, int h) {
-        BufferedImage sprite = this.enemy.isBoss() ? Assets.BOSS_FIGHT : Assets.ENEMY_FIGHT;
+        BufferedImage sprite;
+        switch(enemy.getId()) {
+    	case 0:
+    		sprite = Assets.BOSS1_FIGHT;
+    		break;
+    	case 1:
+    		sprite = Assets.BOSS2_FIGHT;
+    		break;
+    	case 2:
+    		sprite = Assets.BOSS1_FIGHT;
+    		break;
+    	case 3:
+    		sprite = Assets.BOSS1_FIGHT;
+    		break;
+    	default:
+    		sprite = Assets.ENEMY_FIGHT;
+    		break;
+    }
         g2.drawImage(sprite, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
 
         g2.setColor(Color.GREEN);

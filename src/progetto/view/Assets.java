@@ -20,8 +20,10 @@ public final class Assets {
     public static final BufferedImage BUSH_TRAMPLED;
     public static final BufferedImage ENEMY;
     public static final BufferedImage ENEMY_FIGHT;
-    public static final BufferedImage BOSS;
-    public static final BufferedImage BOSS_FIGHT;
+    public static final BufferedImage BOSS1;
+    public static final BufferedImage BOSS1_FIGHT;
+    public static final BufferedImage BOSS2;
+    public static final BufferedImage BOSS2_FIGHT;
     public static final BufferedImage PLAYER_SHEET;
     public static final BufferedImage PLAYER_COMBAT;
 
@@ -37,10 +39,12 @@ public final class Assets {
             TREE = load("/Tree.png");
             ENEMY = load("/Enemy.png");
             ENEMY_FIGHT = load("/EnemyFight.png");
-            BOSS = load("/Boss1.png");
-            BOSS_FIGHT = load("/Boss1Fight.png");
+            BOSS1 = load("/Boss1.png");
+            BOSS1_FIGHT = load("/Boss1Fight.png");
+            BOSS2 = load("/Boss2.png");
+            BOSS2_FIGHT = load("/Boss2Fight.png");
             PLAYER_SHEET = load("/Player.png");
-            PLAYER_COMBAT = PLAYER_SHEET.getSubimage(32, 0, 32, 32);
+            PLAYER_COMBAT = PLAYER_SHEET.getSubimage(96, 0, 96, 96);
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
         }

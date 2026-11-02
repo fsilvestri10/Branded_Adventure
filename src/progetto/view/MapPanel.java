@@ -123,8 +123,26 @@ public class MapPanel extends JPanel {
         // ogni tanto scelgo a caso una delle 4 righe dello sprite sheet
         anim.counter++;
         if (anim.counter >= ENEMY_FRAME_TICKS) {
-            BufferedImage sheet = enemy.isBoss() ? Assets.BOSS : Assets.ENEMY;
-            anim.frame = sheet.getSubimage(32, this.rnd.nextInt(4) * 32, 32, 32);
+            //BufferedImage sheet = enemy.isBoss() ? Assets.BOSS1 : Assets.ENEMY;
+        	BufferedImage sheet = null;
+            switch(enemy.getId()) {
+            	case 0:
+            		sheet = Assets.BOSS1;
+            		break;
+            	case 1:
+            		sheet = Assets.BOSS2;
+            		break;
+            	case 2:
+            		sheet = Assets.BOSS1;
+            		break;
+            	case 3:
+            		sheet = Assets.BOSS1;
+            		break;
+            	default:
+            		sheet = Assets.ENEMY;
+            		break;
+            }
+            anim.frame = sheet.getSubimage(96, this.rnd.nextInt(4) * 96, 96, 96);
             anim.counter = 0;
         }
 
