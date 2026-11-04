@@ -56,10 +56,16 @@ public class FightPanel extends JPanel {
         for (int i = 0; i < skillButtons.length; i++) {
             if (this.player.getSkills().size() > i) {
                 skillButtons[i] = new JButton(this.player.getSkills().get(i).getName());
-                final int index = i;
-                skillButtons[i].addActionListener(e -> {
-                    if (this.onSkill != null) this.onSkill.accept(index);
-                });
+                if(this.player.getSkills().get(i).getCooldown() == 0) {
+                	// skill non in cooldown
+                	int index = i;
+                	skillButtons[i].addActionListener(e -> {
+                    	if (this.onSkill != null) this.onSkill.accept(index);
+                	});
+                } else {
+                	//skill in cooldown
+                	
+                }
             } else skillButtons[i] = new JButton("???");
         }
     }
@@ -119,25 +125,23 @@ public class FightPanel extends JPanel {
     }
 
     private void drawEnemyBattle(Graphics2D g2, int w, int h) {
-        BufferedImage sprite;
         switch(enemy.getId()) {
     	case 0:
-    		sprite = Assets.BOSS1_FIGHT;
+    		g2.drawImage(Assets.BOSS1_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
     		break;
     	case 1:
-    		sprite = Assets.BOSS2_FIGHT;
+    		g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 4, h / 4, w / 2, h / 2, null);
     		break;
     	case 2:
-    		sprite = Assets.BOSS1_FIGHT;
+    		g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
     		break;
     	case 3:
-    		sprite = Assets.BOSS1_FIGHT;
+    		g2.drawImage(Assets.BOSS1_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
     		break;
     	default:
-    		sprite = Assets.ENEMY_FIGHT;
+    		g2.drawImage(Assets.ENEMY_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
     		break;
     }
-        g2.drawImage(sprite, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
 
         g2.setColor(Color.GREEN);
         double percentHP = (double) this.enemy.getCurrentHP() / this.enemy.getTotalHP();

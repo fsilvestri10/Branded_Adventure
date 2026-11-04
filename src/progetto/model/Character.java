@@ -42,6 +42,9 @@ public abstract class Character extends WorldObject {
     public void heal(int amount) {
         this.currentHP = Math.min(this.totalHP, this.currentHP + amount);
     }
+    public void slash(int amount, Character target) {
+        target.currentHP = Math.max(0, target.currentHP - amount);
+    }
 
     public boolean isDead() {
         return this.currentHP <= 0;

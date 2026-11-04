@@ -13,6 +13,7 @@ public class Player extends Character {
     private boolean moving = false;
     private int exp;
     private int gold;
+    
 
     public Player(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height) {
         super(name, totalHP, level, tileWorldX, tileWorldY, width, height);
@@ -51,11 +52,14 @@ public class Player extends Character {
 
     /** Usa l'abilità in posizione index (per ora esiste solo la cura). */
     public void useSkill(int index, Enemy enemy) {
-        if (index < 0 || index >= this.getSkills().size()) return;
+        //if (index < 0 || index >= this.getSkills().size()) return;
         Skill skill = this.getSkills().get(index);
         switch (skill.getType()) {
             case HEAL:
                 this.heal(skill.getPower());
+                break;
+            case DAMAGE:
+                this.slash(skill.getPower(), enemy);
                 break;
             default:
                 break;

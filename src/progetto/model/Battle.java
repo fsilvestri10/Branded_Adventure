@@ -39,6 +39,8 @@ public class Battle {
     public boolean playerSkill(int index) {
         if (this.state != State.PLAYER_TURN) return false;
         if (index < 0 || index >= this.player.getSkills().size()) return false;
+        if (this.player.getSkills().get(index).getCooldown() > 0) return false;
+        this.player.getSkills().get(index).resetCooldown();
         this.state = State.PLAYER_ACTING;
         this.message = "Il giocatore usa un'abilità!";
         this.pendingSkill = index;
@@ -50,7 +52,11 @@ public class Battle {
         if (this.state != State.PLAYER_ACTING) return;
         if (this.pendingSkill < 0) this.player.attack(this.enemy);
         else this.player.useSkill(this.pendingSkill, this.enemy);
-
+        
+        for(int i = 0; i < this.player.getSkills().size(); i++) {
+        	if(this.player.getSkills().get(i).getCooldown() > 0) this.player.getSkills().get(i).decreaseCooldown();
+        }
+        
         if (this.enemy.isDead()) {
             this.state = State.WON;
             return;

@@ -21,6 +21,7 @@ public class Enemy extends Character {
                 this.setSkill(SkillDatabase.getHeal());
                 break;
             case 1:
+            	this.setSkill(SkillDatabase.getSlash());
                 break;
             case 2:
                 break;
