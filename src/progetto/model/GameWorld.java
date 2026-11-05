@@ -15,9 +15,11 @@ public class GameWorld {
     private ArrayList<WorldObject> objectHitbox = new ArrayList<>();
     private int enemyCount = 0;
     private int enemyId = 4;
+    private Player player;
 
-    public GameWorld(int tileSize) {
+    public GameWorld(int tileSize, Player player) {
         this.tileSize = tileSize;
+        this.player = player;
         this.generateMap();
     }
 
@@ -52,6 +54,9 @@ public class GameWorld {
         this.putObject(5, new Enemy(1, "Knight Boss", 100, 5, 20 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(2, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
+        
+        this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize, this.tileSize, this.player));
+        
         for (int i = 0; i < 10; i++)
             if (!this.putObject(2, new Tree(this.rnd.nextInt(2, 48) * this.tileSize, this.rnd.nextInt(11, 48) * this.tileSize, this.tileSize, this.tileSize))) i--;
         for (int i = 0; i < 30; i++)
@@ -62,7 +67,7 @@ public class GameWorld {
     // controllo quanti nemici ci sono, se un nemico è stato sconfitto ne aggiungo uno nuovo
     private void checkEnemy() {
         while (this.enemyCount < 5) {
-            if (!this.putObject(3, new Enemy(this.enemyId, "pus", 10, 2, this.rnd.nextInt(14, 36) * this.tileSize, this.rnd.nextInt(23, 36) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCount--;
+            if (!this.putObject(3, new Enemy(this.enemyId, "pus", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), this.rnd.nextInt(14, 36) * this.tileSize, this.rnd.nextInt(23, 36) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCount--;
             this.enemyCount++;
             this.enemyId++;
         }
@@ -82,7 +87,7 @@ public class GameWorld {
     /** True se nel rettangolo c'è un ostacolo (nemico, albero o muro). */
     public boolean isBlocked(Box area) {
         for (WorldObject object : this.objectHitbox) {
-            if ((object instanceof Enemy || object instanceof Tree || object instanceof Wall) && area.intersects(object.getHitbox())) return true;
+            if ((object instanceof Enemy || object instanceof Tree || object instanceof Wall || object instanceof Shop) && area.intersects(object.getHitbox())) return true;
         }
         return false;
     }
@@ -95,11 +100,13 @@ public class GameWorld {
     }
 
     /** Il nemico a portata di combattimento rispetto al giocatore, oppure null. */
-    public Enemy findEnemyInRange(Player player) {
-        Enemy found = null;
+    public Object findEnemyInRange(Player player) {
+        Object found = null;
         for (WorldObject object : this.objectHitbox) {
             if (object instanceof Enemy && ((Enemy) object).getInteractRange().intersects(player.getHitbox())) {
                 found = (Enemy) object;
+            } else if(object instanceof Shop && ((Shop) object).getInteractRange().intersects(player.getHitbox())) {
+            	found = (Shop) object;
             }
         }
         return found;

@@ -34,6 +34,20 @@ public class Enemy extends Character {
     public void attack(Character target) {
         target.takeDamage(this.getStrength() + this.getEquipment(0).getValue());
     }
+    public void useSkill(Character target) {
+    	switch(this.getId()) {
+    		case 0:
+    			this.heal(SkillDatabase.getHeal().getPower());
+    			break;
+    		case 1:
+    			target.takeDamage(SkillDatabase.getSlash().getPower());
+    			break;
+    		case 2:
+    			break;
+    		case 3:
+    			break;
+    	}
+    }
 
     /** I boss hanno id da 0 a 3, i nemici normali partono da 4. */
     public boolean isBoss() {

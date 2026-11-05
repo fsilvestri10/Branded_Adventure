@@ -89,4 +89,7 @@ public abstract class Character extends WorldObject {
     protected void updateStrength() {
         this.strength = this.level * 3;
     }
+    public void changeEquipment(int i,Item item) {
+    	this.equipment.set(i, item);
+    }
 }

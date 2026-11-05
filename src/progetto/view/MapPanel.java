@@ -16,6 +16,7 @@ import progetto.model.Bush;
 import progetto.model.Enemy;
 import progetto.model.GameWorld;
 import progetto.model.Player;
+import progetto.model.Shop;
 import progetto.model.Tree;
 import progetto.model.Wall;
 import progetto.model.WorldObject;
@@ -104,7 +105,7 @@ public class MapPanel extends JPanel {
     private void drawObject(Graphics2D g2, WorldObject o, int cx, int cy) {
         int screenX = o.getX() - this.player.getX() + cx;
         int screenY = o.getY() - this.player.getY() + cy;
-
+        
         if (o instanceof Wall) {
             g2.drawImage(Assets.WALL, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
         } else if (o instanceof Tree) {
@@ -114,6 +115,8 @@ public class MapPanel extends JPanel {
             g2.drawImage(img, screenX, screenY, o.getWidth(), o.getHeight(), null);
         } else if (o instanceof Enemy) {
             drawEnemy(g2, (Enemy) o, screenX, screenY);
+        } else if(o instanceof Shop) {
+        	g2.drawImage(Assets.WALL, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
         }
     }
 

@@ -1,5 +1,7 @@
 package progetto.model;
 
+import java.util.Random;
+
 /**
  * MODEL: lo scontro a turni tra giocatore e nemico.
  * Contiene turni, stato e ricompense; non sa nulla di pulsanti, timer o schermate.
@@ -14,7 +16,7 @@ public class Battle {
         WON,
         LOST
     }
-
+    private Random rnd = new Random();
     private final Player player;
     private final Enemy enemy;
     private State state = State.PLAYER_TURN;
@@ -68,7 +70,14 @@ public class Battle {
     /** Il nemico attacca. Se il giocatore è ancora vivo torna il suo turno. */
     public void resolveEnemyAction() {
         if (this.state != State.ENEMY_TURN) return;
-        this.enemy.attack(this.player);
+        
+        if(this.enemy.getId() > 3) {
+        	this.enemy.attack(this.player);
+        }
+        else {
+        	if(this.rnd.nextInt(0,11) < 4) this.enemy.useSkill(player);
+        	else this.enemy.attack(player);
+        }
 
         if (this.player.isDead()) {
             this.state = State.LOST;

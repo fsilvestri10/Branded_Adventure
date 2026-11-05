@@ -6,11 +6,13 @@ import progetto.model.Battle;
 import progetto.model.Enemy;
 import progetto.model.GameWorld;
 import progetto.model.Player;
+import progetto.model.Shop;
 import progetto.view.AudioPlayer;
 import progetto.view.FightPanel;
 import progetto.view.GameFrame;
 import progetto.view.GameOverPanel;
 import progetto.view.MapPanel;
+import progetto.view.ShopPanel;
 
 /**
  * CONTROLLER: il cuore del gioco.
@@ -66,15 +68,25 @@ public class GameController {
         this.world.update();
 
         // se c'è un nemico a portata, la view mostra il suggerimento e con E si combatte
-        Enemy near = this.world.findEnemyInRange(this.player);
+        Object near = this.world.findEnemyInRange(this.player);
         this.mapPanel.setFightHint(near != null);
-        if (this.keys.ePressed && near != null) {
+        if(near == null) return;
+        
+        if (this.keys.ePressed && near instanceof Enemy) {
             this.keys.ePressed = false;
-            startBattle(near);
+            startBattle((Enemy)near);
+        } else if(this.keys.ePressed && near instanceof Shop) {
+        	this.keys.ePressed = false;
+            openShop((Shop)near);
         }
     }
 
-    private void startBattle(Enemy enemy) {
+    private void openShop(Shop shop) {
+    	this.onMap = false;
+    	ShopPanel shopPanel = new ShopPanel ();
+    	this.frame.showPanel(shopPanel);
+    }
+     private void startBattle(Enemy enemy) {
         this.onMap = false;
         this.world.removeEnemy(enemy);
 
