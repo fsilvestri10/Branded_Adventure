@@ -17,10 +17,10 @@ public class BattleController {
     private final Runnable onWon;
     private final Runnable onLost;
 
-    public BattleController(Battle battle, FightPanel panel, Runnable onWon, Runnable onLost) {
+    public BattleController(Battle battle, FightPanel panel, Runnable onBattleWon, Runnable onBattleLost) {
         this.battle = battle;
-        this.onWon = onWon;
-        this.onLost = onLost;
+        this.onWon = onBattleWon;
+        this.onLost = onBattleLost;
 
         // se viene premuto attacco o un'abilità, il giocatore agisce (se è il suo turno)
         panel.setOnAttack(() -> {

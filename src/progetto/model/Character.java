@@ -26,15 +26,19 @@ public abstract class Character extends WorldObject {
         this.equipment.add(0, ItemDatabase.getSword());
         this.equipment.add(1, ItemDatabase.getArmor());
     }
-
-    public abstract void attack(Character target);
-
+    public void attack(Character target) {
+        // l'armatura del bersaglio è considerata dentro takeDamage()
+    	if(this.getEquipmentSize() == 0) target.takeDamage(this.getStrength());
+    	else target.takeDamage(this.getStrength() + this.getEquipment(0).getValue());
+    }
     /**
      * Subisce un attacco: l'armatura riduce il danno. Gli HP non scendono sotto zero.
      * (Con la stessa formula di prima: HP - (attacco - armatura), ma l'armatura non può mai curare.)
      */
     public void takeDamage(int rawDamage) {
-        int damage = Math.max(0, rawDamage - this.getEquipment(1).getValue());
+        int damage = 0;
+        if(this.getEquipmentSize() == 2) damage = Math.max(0, rawDamage - this.getEquipment(1).getValue());
+        else damage = Math.max(0, rawDamage);
         this.currentHP = Math.max(0, this.currentHP - damage);
     }
 
@@ -76,6 +80,10 @@ public abstract class Character extends WorldObject {
 
     public Item getEquipment(int i) {
         return this.equipment.get(i);
+    }
+    
+    public int getEquipmentSize() {
+    	return this.equipment.size();
     }
 
     protected void setSkill(Skill skill) {

@@ -13,12 +13,13 @@ public class Shop extends WorldObject{
 		this.player = player;
 		this.items = new ArrayList<>(2);
 		this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
-	}
-	private void updateShop() {
 		if(player.getLevel() <= 5) {
-			this.items.add(ItemDatabase.getSword());
-			this.items.add(ItemDatabase.getArmor());
+			this.items.add(ItemDatabase.getBFSword());
+			this.items.add(ItemDatabase.getChainmail());
 		}
+	}
+	public void updateShop() {
+		
 	}
 	public Item getItem(int i) {
 		return this.items.get(i);

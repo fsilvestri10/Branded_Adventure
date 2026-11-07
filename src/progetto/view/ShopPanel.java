@@ -14,7 +14,9 @@ public class ShopPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JButton buyItem1 = new JButton("Compra");
     private JButton buyItem2 = new JButton("Compra");
+    private JButton exit = new JButton("Esci");
 	private IntConsumer onBuy;
+	private Runnable onExit;
     
 	public ShopPanel() {
 		this.setLayout(null);
@@ -24,8 +26,12 @@ public class ShopPanel extends JPanel {
         this.buyItem2.addActionListener(e -> {
             if (this.onBuy != null) this.onBuy.accept(1);
         });
+        this.exit.addActionListener(e -> {
+            if (this.onExit != null) this.onExit.run();
+        });
         this.add(buyItem1);
-        this.add(buyItem1);
+        this.add(buyItem2);
+        this.add(exit);
 	}
 	
 	protected void paintComponent(Graphics g) {
@@ -40,10 +46,14 @@ public class ShopPanel extends JPanel {
         
         setButton(buyItem1, w - w / 5, h - h / 5, w / 5, h / 5);
         setButton(buyItem2, w - w * 2 / 5, h - h / 5, w / 5, h / 5);
+        setButton(exit, w - w*3 / 5, h - h / 5, w / 5, h / 5);
 	}
 	public void setOnBuy(IntConsumer onBuy) {
         this.onBuy = onBuy;
     }
+	public void setOnExit(Runnable onExit) {
+		this.onExit = onExit;
+	}
 	private void setButton(JButton button, int xPos, int yPos, int width, int height) {
         button.setBounds(xPos, yPos, width, height);
         button.setBackground(Color.BLACK);

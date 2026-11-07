@@ -170,9 +170,15 @@ public class MapPanel extends JPanel {
 
     private void drawHud(Graphics2D g2, int cx, int cy) {
         g2.setColor(new Color(0, 0, 0, 128));
-        g2.fillRect(0, cy * 2 - cy / 10, cx / 3, cy / 10);
+        g2.fillRect(0, cy * 2 - cy / 5, cx / 3, cy / 5);
         g2.setColor(Color.YELLOW);
         g2.setFont(new Font("sanserif", Font.BOLD, 25));
         g2.drawString("Gold: " + this.player.getGold(), 0, cy * 2);
+        g2.drawString("Equipment: ", 0, cy*2 - 100);
+        if(this.player.getEquipmentSize() != 0) {
+        	g2.drawString(this.player.getEquipment(0).getName(), 0, cy*2 - 70);
+        	g2.drawString(this.player.getEquipment(1).getName(), 0, cy*2 - 40);
+        }
+        
     }
 }

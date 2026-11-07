@@ -30,10 +30,6 @@ public class Enemy extends Character {
         }
     }
 
-    @Override
-    public void attack(Character target) {
-        target.takeDamage(this.getStrength() + this.getEquipment(0).getValue());
-    }
     public void useSkill(Character target) {
     	switch(this.getId()) {
     		case 0:

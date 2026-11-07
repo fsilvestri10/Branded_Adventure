@@ -17,6 +17,7 @@ public class Player extends Character {
 
     public Player(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height) {
         super(name, totalHP, level, tileWorldX, tileWorldY, width, height);
+        
     }
 
     /**
@@ -43,12 +44,7 @@ public class Player extends Character {
         world.trampleBushes(nextY);
         if (!world.isBlocked(nextY)) this.tileWorldY += dy;
     }
-
-    @Override
-    public void attack(Character target) {
-        // l'armatura del bersaglio è considerata dentro takeDamage()
-        target.takeDamage(this.getStrength() + this.getEquipment(0).getValue());
-    }
+    
 
     /** Usa l'abilità in posizione index (per ora esiste solo la cura). */
     public void useSkill(int index, Enemy enemy) {

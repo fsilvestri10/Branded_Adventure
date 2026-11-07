@@ -83,7 +83,9 @@ public class GameController {
 
     private void openShop(Shop shop) {
     	this.onMap = false;
+    	shop.updateShop();
     	ShopPanel shopPanel = new ShopPanel ();
+    	new ShopController(shopPanel, player, shop, this::onExitShop);
     	this.frame.showPanel(shopPanel);
     }
      private void startBattle(Enemy enemy) {
@@ -97,6 +99,11 @@ public class GameController {
         this.audio.play("Normal_fight");
         this.frame.showPanel(fightPanel);
     }
+     
+     private void onExitShop() {
+    	 this.onMap = true;
+    	 this.frame.showPanel(this.mapPanel);
+     }
 
     // vittoria: ferma la musica e torna alla mappa
     private void onBattleWon() {
