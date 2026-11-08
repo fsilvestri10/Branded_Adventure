@@ -10,7 +10,7 @@ public class GameFrame extends JFrame {
 
     public GameFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 1000, 800);
+        setBounds(400, 150, 1000, 800);
     }
 
     /** Sostituisce la schermata corrente (mappa, combattimento, game over). */

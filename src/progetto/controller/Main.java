@@ -27,6 +27,7 @@ public class Main {
                 // CONTROLLER
                 GameController controller = new GameController(frame, keys, world, player, mapPanel);
 
+                frame.setResizable(false);
                 frame.setVisible(true);
                 controller.start();
             } catch (Exception e) {

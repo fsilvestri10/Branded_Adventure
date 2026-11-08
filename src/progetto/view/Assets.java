@@ -27,7 +27,13 @@ public final class Assets {
     public static final BufferedImage PLAYER_SHEET;
     public static final BufferedImage PLAYER_COMBAT;
     public static final BufferedImage SHOP;
-
+    public static final BufferedImage GOLD;
+    public static final BufferedImage CHAINMAIL;
+    public static final BufferedImage BF_SWORD;
+    public static final BufferedImage ANCIENT_SCROLL;
+    public static final BufferedImage SWORD;
+    public static final BufferedImage ARMOR;
+    
     static {
         try {
             BACKGROUND = load("/Background.png");
@@ -47,6 +53,12 @@ public final class Assets {
             PLAYER_SHEET = load("/Player.png");
             PLAYER_COMBAT = PLAYER_SHEET.getSubimage(96, 0, 96, 96);
             SHOP = load("/Shop.png");
+            GOLD = load("/Coin.png");
+            CHAINMAIL = load("/Chainmail.png");
+            BF_SWORD = load("/BF_Sword.png");
+            ANCIENT_SCROLL = load("/Ancient_scroll.png");
+            SWORD = load("/Long_Sword.png");
+            ARMOR = load("/Cloth_Armor.png");
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
         }

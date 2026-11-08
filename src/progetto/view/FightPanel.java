@@ -55,7 +55,8 @@ public class FightPanel extends JPanel {
         // creiamo i pulsanti per le abilità che possediamo, per le altre mettiamo "???"
         for (int i = 0; i < skillButtons.length; i++) {
             if (this.player.getSkills().size() > i) {
-                skillButtons[i] = new JButton(this.player.getSkills().get(i).getName());
+            	if (this.player.getSkills().get(i).getCooldown() == 0)
+            		skillButtons[i] = new JButton(this.player.getSkills().get(i).getName());
                 if(this.player.getSkills().get(i).getCooldown() == 0) {
                 	// skill non in cooldown
                 	int index = i;
@@ -141,7 +142,7 @@ public class FightPanel extends JPanel {
     	default:
     		g2.drawImage(Assets.ENEMY_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
     		break;
-    }
+        }
 
         g2.setColor(Color.GREEN);
         double percentHP = (double) this.enemy.getCurrentHP() / this.enemy.getTotalHP();

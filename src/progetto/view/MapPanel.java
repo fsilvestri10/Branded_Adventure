@@ -170,14 +170,25 @@ public class MapPanel extends JPanel {
 
     private void drawHud(Graphics2D g2, int cx, int cy) {
         g2.setColor(new Color(0, 0, 0, 128));
-        g2.fillRect(0, cy * 2 - cy / 5, cx / 3, cy / 5);
+        g2.fillRect(0, 600, 200, 200);
         g2.setColor(Color.YELLOW);
-        g2.setFont(new Font("sanserif", Font.BOLD, 25));
-        g2.drawString("Gold: " + this.player.getGold(), 0, cy * 2);
-        g2.drawString("Equipment: ", 0, cy*2 - 100);
+        g2.setFont(new Font("Simplex", Font.BOLD, 25));
+        g2.drawImage(Assets.GOLD, 0, 730, 30, 30, null);
+        g2.drawString("Gold: " + this.player.getGold(), 30, 755);
+        g2.drawString("Equipment: ", 0, 640);
+        
         if(this.player.getEquipmentSize() != 0) {
-        	g2.drawString(this.player.getEquipment(0).getName(), 0, cy*2 - 70);
-        	g2.drawString(this.player.getEquipment(1).getName(), 0, cy*2 - 40);
+        	switch (this.player.getEquipment(0).getName()) {
+        		case "Sword":
+        			g2.drawImage(Assets.SWORD, 0, 655, 30, 30, null);
+        	}
+        	
+        	switch (this.player.getEquipment(1).getName()) {
+        		case "Armor":
+        			g2.drawImage(Assets.ARMOR, 0, 695, 30, 30, null);
+        	}
+        	g2.drawString(this.player.getEquipment(0).getName(), 30, 680);
+        	g2.drawString(this.player.getEquipment(1).getName(), 30, 720);
         }
         
     }

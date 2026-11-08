@@ -17,7 +17,7 @@ public class ShopPanel extends JPanel {
 	private JButton buyItem1 = new JButton("Compra");
     private JButton buyItem2 = new JButton("Compra");
     private JButton exit = new JButton("Esci");
-    private JLabel noGold = new JLabel("non hai abbastanza oro per comprare questo oggetto");
+    private JLabel noGold = new JLabel("Non hai abbastanza oro per comprare questo oggetto");
 	private IntConsumer onBuy;
 	private Runnable onExit;
     
@@ -48,15 +48,30 @@ public class ShopPanel extends JPanel {
         g2.setColor(new Color(0, 0, 0, 128));
         g2.fillRect(0, h - h / 5, w, h / 5);
         
+        drawItems(g2, w, h);
+        
         setButton(buyItem1, w - w / 5, h - h / 5, w / 5, h / 5);
         setButton(buyItem2, w - w * 2 / 5, h - h / 5, w / 5, h / 5);
-        setButton(exit, w - w*3 / 5, h - h / 5, w / 5, h / 5);
+        setButton(exit, w - w * 3 / 5, h - h / 5, w / 5, h / 5);
         
 	}
+	
+	public void drawItems (Graphics g2, int w, int h) {
+		
+		g2.drawImage(Assets.ANCIENT_SCROLL, w - w * 2 / 5, h - h * 2 / 3, w / 5, h / 6, null);
+		//g2.setFont(new Font("Simplex", Font.BOLD, 25));
+		//g2.drawString("CHAINMAIL", w - w * 3 / 8, h * 2 / 5);
+		//g2.drawString("500 GOLD", w - w * 3 / 8, h - h * 2 / 6);
+		g2.drawImage(Assets.CHAINMAIL, w - w * 2 / 5, h - h * 2 / 4, w / 5, h / 3, null);
+		
+		g2.drawImage(Assets.ANCIENT_SCROLL, w - w / 5, h - h * 2 / 3, w / 5, h / 6, null);
+		g2.drawImage(Assets.BF_SWORD,  w - w / 5, h - h * 2 / 4, w / 5, h / 3, null);
+	}
+	
 	public void drawNoGoldLabel() {
 		int w = getWidth();
         int h = getHeight();
-        this.noGold.setBounds(w - w*3 / 5, h - h / 2, w, h / 5);
+        this.noGold.setBounds(w - w*3 / 5, h / 3, w, h / 5);
         this.noGold.setBackground(new Color(0, 0, 0, 128));
         this.noGold.setForeground(Color.WHITE);
         this.noGold.setFont(new Font("Tahoma", Font.BOLD, 20));
