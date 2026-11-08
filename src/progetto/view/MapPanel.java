@@ -116,7 +116,7 @@ public class MapPanel extends JPanel {
         } else if (o instanceof Enemy) {
             drawEnemy(g2, (Enemy) o, screenX, screenY);
         } else if(o instanceof Shop) {
-        	g2.drawImage(Assets.WALL, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
+        	g2.drawImage(Assets.SHOP, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
         }
     }
 

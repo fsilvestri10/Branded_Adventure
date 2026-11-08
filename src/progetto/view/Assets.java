@@ -26,6 +26,7 @@ public final class Assets {
     public static final BufferedImage BOSS2_FIGHT;
     public static final BufferedImage PLAYER_SHEET;
     public static final BufferedImage PLAYER_COMBAT;
+    public static final BufferedImage SHOP;
 
     static {
         try {
@@ -45,6 +46,7 @@ public final class Assets {
             BOSS2_FIGHT = load("/Boss2Fight.png");
             PLAYER_SHEET = load("/Player.png");
             PLAYER_COMBAT = PLAYER_SHEET.getSubimage(96, 0, 96, 96);
+            SHOP = load("/Shop.png");
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
         }

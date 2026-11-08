@@ -3,10 +3,12 @@ package progetto.model;
 public class Item {
     private String name;
     private int value;
+    private int cost;
 
-    public Item(String name, int value) {
+    public Item(String name, int value, int cost) {
         this.name = name;
         this.value = value;
+        this.cost = cost;
     }
 
     public String getName() {
@@ -15,5 +17,8 @@ public class Item {
 
     public int getValue() {
         return this.value;
+    }
+    public int getCost() {
+        return this.cost;
     }
 }
