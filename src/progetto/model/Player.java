@@ -108,4 +108,5 @@ public class Player extends Character {
     public int getGold() {
         return this.gold;
     }
+    
 }

@@ -55,7 +55,7 @@ public class GameWorld {
         this.putObject(5, new Enemy(2, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         
-        this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize, this.tileSize, this.player));
+        this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize * 3, this.tileSize * 4, this.player));
         
         for (int i = 0; i < 10; i++)
             if (!this.putObject(2, new Tree(this.rnd.nextInt(2, 48) * this.tileSize, this.rnd.nextInt(11, 48) * this.tileSize, this.tileSize, this.tileSize))) i--;

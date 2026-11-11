@@ -62,7 +62,7 @@ public class GameController {
         if (this.keys.downPressed) dy += Player.SPEED;
         if (this.keys.leftPressed) dx -= Player.SPEED;
         if (this.keys.rightPressed) dx += Player.SPEED;
-
+        	
         this.player.move(dx, dy, this.world);
         this.mapPanel.updateAnimation();
         this.world.update();

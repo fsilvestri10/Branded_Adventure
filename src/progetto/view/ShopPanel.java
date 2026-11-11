@@ -58,13 +58,13 @@ public class ShopPanel extends JPanel {
 	
 	public void drawItems (Graphics g2, int w, int h) {
 		
-		g2.drawImage(Assets.ANCIENT_SCROLL, w - w * 2 / 5, h - h * 2 / 3, w / 5, h / 6, null);
+		g2.drawImage(Assets.ANCIENT_SCROLL, w - w * 2 / 5, h - h * 2 / 3, w / 5, h / 7, null);
 		//g2.setFont(new Font("Simplex", Font.BOLD, 25));
 		//g2.drawString("CHAINMAIL", w - w * 3 / 8, h * 2 / 5);
 		//g2.drawString("500 GOLD", w - w * 3 / 8, h - h * 2 / 6);
 		g2.drawImage(Assets.CHAINMAIL, w - w * 2 / 5, h - h * 2 / 4, w / 5, h / 3, null);
 		
-		g2.drawImage(Assets.ANCIENT_SCROLL, w - w / 5, h - h * 2 / 3, w / 5, h / 6, null);
+		g2.drawImage(Assets.ANCIENT_SCROLL, w - w / 5, h - h * 2 / 3, w / 5, h / 7, null);
 		g2.drawImage(Assets.BF_SWORD,  w - w / 5, h - h * 2 / 4, w / 5, h / 3, null);
 	}
 	

@@ -70,16 +70,25 @@ public class MapPanel extends JPanel {
         int cx = getWidth() / 2;
         int cy = getHeight() / 2;
 
-        // disegno dello sfondo
-        g2.drawImage(Assets.BACKGROUND, 0, 0, getWidth(), getHeight(), null);
-
+        // controllo se il player si trova vicino ai bordi della mappa, in caso fermo la telecamera
+        if (cx > this.player.getX())
+        	cx = this.player.getX();
+        if (cy > this.player.getY())
+        	cy = this.player.getY();
+        
+        if (this.player.getX() > 2000)
+        	cx = getWidth() - (2500 - this.player.getX());
+        if (this.player.getY() > 2125)
+        	cy = getHeight() - (2500 - this.player.getY());
+        
+        // disegno il mondo
         drawTiles(g2, cx, cy);
-
-        // disegno gli oggetti del mondo
+        
+        // disegno gli oggetti
         for (WorldObject object : this.world.getObjects()) {
             drawObject(g2, object, cx, cy);
         }
-
+      
         drawPlayer(g2, cx, cy);
         drawHud(g2, cx, cy);
     }
