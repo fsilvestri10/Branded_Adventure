@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 /** CONTROLLER: raccoglie l'input da tastiera e ricorda quali tasti sono premuti. */
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, ePressed, escPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {}
@@ -20,6 +20,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) { leftPressed = true; }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) { rightPressed = true; }
         if (code == KeyEvent.VK_E) { ePressed = true; }
+        if (code == KeyEvent.VK_ESCAPE) { escPressed = true;}
     }
 
     @Override
@@ -31,5 +32,6 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) { leftPressed = false; }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) { rightPressed = false; }
         if (code == KeyEvent.VK_E) { ePressed = false; }
+        if (code == KeyEvent.VK_ESCAPE) { escPressed = false;}
     }
 }

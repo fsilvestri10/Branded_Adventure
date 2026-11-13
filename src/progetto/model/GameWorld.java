@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /** MODEL: il mondo di gioco (mappa, ostacoli, nemici). Nessuna immagine e nessun disegno. */
-public class GameWorld {
+public class GameWorld extends Map {
 
     private static final int COLUMNS = 50;
     private static final int ROWS = 50;
@@ -37,7 +37,7 @@ public class GameWorld {
     }
 
     // genero la mappa con i muri
-    private void generateMap() {
+    protected void generateMap() {
         for (int i = 0; i < COLUMNS; i++) {
             for (int j = 0; j < ROWS; j++) {
                 if (j == 49 || j == 9 || (j < 9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) || (i == 0 || i == 49) && j > 9) {
@@ -56,6 +56,7 @@ public class GameWorld {
         this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         
         this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize * 3, this.tileSize * 4, this.player));
+        
         
         for (int i = 0; i < 10; i++)
             if (!this.putObject(2, new Tree(this.rnd.nextInt(2, 48) * this.tileSize, this.rnd.nextInt(11, 48) * this.tileSize, this.tileSize, this.tileSize))) i--;

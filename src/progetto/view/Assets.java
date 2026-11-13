@@ -18,22 +18,27 @@ public final class Assets {
     public static final BufferedImage TREE;
     public static final BufferedImage BUSH;
     public static final BufferedImage BUSH_TRAMPLED;
+    public static final BufferedImage BUILDINGS;
+    public static final BufferedImage SHOP;
+    
     public static final BufferedImage ENEMY;
     public static final BufferedImage ENEMY_FIGHT;
     public static final BufferedImage BOSS1;
     public static final BufferedImage BOSS1_FIGHT;
     public static final BufferedImage BOSS2;
     public static final BufferedImage BOSS2_FIGHT;
+    
     public static final BufferedImage PLAYER_SHEET;
     public static final BufferedImage PLAYER_COMBAT;
-    public static final BufferedImage SHOP;
-    public static final BufferedImage GOLD;
-    public static final BufferedImage CHAINMAIL;
-    public static final BufferedImage BF_SWORD;
+    
     public static final BufferedImage ANCIENT_SCROLL;
+    public static final BufferedImage GOLD;
     public static final BufferedImage SWORD;
     public static final BufferedImage ARMOR;
-    public static final BufferedImage BUILDINGS;
+    public static final BufferedImage CHAINMAIL;
+    public static final BufferedImage BF_SWORD;
+    
+    
     
     static {
         try {

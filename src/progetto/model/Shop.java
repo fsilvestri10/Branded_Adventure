@@ -18,8 +18,12 @@ public class Shop extends WorldObject{
 			this.items.add(ItemDatabase.getChainmail());
 		}
 	}
-	public void updateShop() {
-		
+	public boolean buy(int index, Player player) {
+	    Item item = items.get(index);
+	    if (item == player.getEquipment(index) || player.getGold() < item.getCost()) return false;
+	    player.changeEquipment(index, item);
+	    player.giveGold(-item.getCost());
+	    return true;
 	}
 	public Item getItem(int i) {
 		return this.items.get(i);

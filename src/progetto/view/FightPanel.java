@@ -55,18 +55,11 @@ public class FightPanel extends JPanel {
         // creiamo i pulsanti per le abilità che possediamo, per le altre mettiamo "???"
         for (int i = 0; i < skillButtons.length; i++) {
             if (this.player.getSkills().size() > i) {
-            	if (this.player.getSkills().get(i).getCooldown() == 0)
-            		skillButtons[i] = new JButton(this.player.getSkills().get(i).getName());
-                if(this.player.getSkills().get(i).getCooldown() == 0) {
-                	// skill non in cooldown
-                	int index = i;
-                	skillButtons[i].addActionListener(e -> {
-                    	if (this.onSkill != null) this.onSkill.accept(index);
-                	});
-                } else {
-                	//skill in cooldown
-                	
-                }
+            	skillButtons[i] = new JButton(this.player.getSkills().get(i).getName());
+            	int index = i;
+               	skillButtons[i].addActionListener(e -> {
+                   	if (this.onSkill != null) this.onSkill.accept(index);
+               	});
             } else skillButtons[i] = new JButton("???");
         }
     }
@@ -108,8 +101,18 @@ public class FightPanel extends JPanel {
         for (int i = 0; i < skillButtons.length; i++) {
             if (this.skillButtons[i] != null && this.skillButtons[i].isVisible()) {
                 setButton(this.skillButtons[i], w - w * 2 / 5, h - h / 5 - h * (i + 1) / 20, w / 5, h / 20);
+                
             }
         }
+        for(int i = 0; i < this.battle.getPlayer().getSkills().size(); i++) {
+        	if(this.battle.getPlayer().getSkills().get(i).getCooldown() != 0 && this.skillsOpened) {
+            	g2.drawImage(Assets.ARMOR, 700, 550, 20, 20, null);
+            	
+            }
+        }
+        
+        g2.drawImage(Assets.ARMOR, 700, 550, 20, 20, null);
+        
     }
 
     private void drawPlayerBattle(Graphics2D g2, int w, int h) {

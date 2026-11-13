@@ -190,11 +190,19 @@ public class MapPanel extends JPanel {
         	switch (this.player.getEquipment(0).getName()) {
         		case "Sword":
         			g2.drawImage(Assets.SWORD, 0, 655, 30, 30, null);
+        			break;
+        		case "BFSword":
+        			g2.drawImage(Assets.BF_SWORD, 0, 655, 30, 30, null);
+        			break;
         	}
         	
         	switch (this.player.getEquipment(1).getName()) {
         		case "Armor":
         			g2.drawImage(Assets.ARMOR, 0, 695, 30, 30, null);
+        			break;
+        		case "Chainmail":
+        			g2.drawImage(Assets.CHAINMAIL, 0, 695, 30, 30, null);
+        			break;
         	}
         	g2.drawString(this.player.getEquipment(0).getName(), 30, 680);
         	g2.drawString(this.player.getEquipment(1).getName(), 30, 720);

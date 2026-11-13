@@ -12,6 +12,7 @@ import progetto.view.FightPanel;
 import progetto.view.GameFrame;
 import progetto.view.GameOverPanel;
 import progetto.view.MapPanel;
+import progetto.view.MenuPanel;
 import progetto.view.ShopPanel;
 
 /**
@@ -67,6 +68,11 @@ public class GameController {
         this.mapPanel.updateAnimation();
         this.world.update();
 
+        if(this.keys.escPressed) {
+        	this.keys.escPressed = false;
+        	onMenu();
+        }
+        
         // se c'è un nemico a portata, la view mostra il suggerimento e con E si combatte
         Object near = this.world.findEnemyInRange(this.player);
         this.mapPanel.setFightHint(near != null);
@@ -79,11 +85,12 @@ public class GameController {
         	this.keys.ePressed = false;
             openShop((Shop)near);
         }
+        
+        
     }
 
     private void openShop(Shop shop) {
     	this.onMap = false;
-    	shop.updateShop();
     	ShopPanel shopPanel = new ShopPanel ();
     	new ShopController(shopPanel, player, shop, this::onExitShop);
     	this.frame.showPanel(shopPanel);
@@ -103,30 +110,42 @@ public class GameController {
      private void onExitShop() {
     	 this.onMap = true;
     	 this.frame.showPanel(this.mapPanel);
+    	 
      }
 
-    // vittoria: ferma la musica e torna alla mappa
-    private void onBattleWon() {
-        this.audio.stop();
-        this.onMap = true;
-        this.frame.showPanel(this.mapPanel);
-    }
+     private void onMenu() {
+    	 this.onMap = false;
+    	 MenuPanel menuPanel = new MenuPanel();
+    	 menuPanel.setOnContinue(this::continueGame);
+    	 menuPanel.setOnExit(() -> System.exit(0));
+    	 this.frame.showPanel(menuPanel);
+     }
+     private void continueGame() {
+    	 this.onMap = true;
+    	 this.frame.showPanel(this.mapPanel);
+     }
+     // vittoria: ferma la musica e torna alla mappa
+     private void onBattleWon() {
+    	 this.audio.stop();
+    	 this.onMap = true;
+    	 this.frame.showPanel(this.mapPanel);
+     }
 
-    // sconfitta: ferma la musica e passa alla schermata di game over
-    private void onBattleLost() {
-        this.audio.stop();
-        GameOverPanel gameOverPanel = new GameOverPanel();
-        gameOverPanel.setOnRetry(this::retry);
-        gameOverPanel.setOnExit(() -> System.exit(0));
-        this.frame.showPanel(gameOverPanel);
-    }
+     // sconfitta: ferma la musica e passa alla schermata di game over
+     private void onBattleLost() {
+    	 this.audio.stop();
+    	 GameOverPanel gameOverPanel = new GameOverPanel();
+    	 gameOverPanel.setOnRetry(this::retry);
+    	 gameOverPanel.setOnExit(() -> System.exit(0));
+    	 this.frame.showPanel(gameOverPanel);
+     }
 
-    // "Riprova": il mondo e il giocatore ripartono da capo
-    private void retry() {
-        int spawn = SPAWN_TILE * this.world.getTileSize();
-        this.world.reset();
-        this.player.respawn(spawn, spawn);
-        this.onMap = true;
-        this.frame.showPanel(this.mapPanel);
-    }
+     // "Riprova": il mondo e il giocatore ripartono da capo
+     private void retry() {
+    	 int spawn = SPAWN_TILE * this.world.getTileSize();
+    	 this.world.reset();
+    	 this.player.respawn(spawn, spawn);
+    	 this.onMap = true;
+    	 this.frame.showPanel(this.mapPanel);
+     }
 }
