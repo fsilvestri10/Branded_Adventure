@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.function.IntConsumer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 import progetto.model.Battle;
 import progetto.model.Enemy;
@@ -99,20 +102,16 @@ public class FightPanel extends JPanel {
 
         // mostra/nasconde le varie abilità se premuto "Skill"
         for (int i = 0; i < skillButtons.length; i++) {
-            if (this.skillButtons[i] != null && this.skillButtons[i].isVisible()) {
+            if (this.skillButtons[i] != null && this.skillButtons[i].isVisible()) 
                 setButton(this.skillButtons[i], w - w * 2 / 5, h - h / 5 - h * (i + 1) / 20, w / 5, h / 20);
-                
-            }
         }
+        // mostra/nasconde l'immagine che indica che la skill è in cooldown
         for(int i = 0; i < this.battle.getPlayer().getSkills().size(); i++) {
-        	if(this.battle.getPlayer().getSkills().get(i).getCooldown() != 0 && this.skillsOpened) {
-            	g2.drawImage(Assets.ARMOR, 700, 550, 20, 20, null);
-            	
-            }
+        	if(this.battle.getPlayer().getSkills().get(i).getCooldown() != 0 && this.skillsOpened) 
+        		this.skillButtons[i].setIcon(new ImageIcon(Assets.ARMOR.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+             else 
+            	this.skillButtons[i].setIcon(null);
         }
-        
-        g2.drawImage(Assets.ARMOR, 700, 550, 20, 20, null);
-        
     }
 
     private void drawPlayerBattle(Graphics2D g2, int w, int h) {
@@ -175,11 +174,8 @@ public class FightPanel extends JPanel {
         this.skillsOpened = !this.skillsOpened;
 
         for (int i = 0; i < skillButtons.length; i++) {
-            if (!this.skillsOpened) {
-                this.remove(skillButtons[i]);
-            } else {
-                this.add(skillButtons[i]);
-            }
+            if (!this.skillsOpened) this.remove(skillButtons[i]);
+            else this.add(skillButtons[i]);
         }
     }
 }

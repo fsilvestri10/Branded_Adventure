@@ -3,27 +3,24 @@ package progetto.model;
 import java.util.ArrayList;
 import java.util.Random;
 
-/** MODEL: il mondo di gioco (mappa, ostacoli, nemici). Nessuna immagine e nessun disegno. */
+ // il mondo di gioco (mappa, ostacoli, nemici)
 public class GameWorld extends Map {
 
     private static final int COLUMNS = 50;
     private static final int ROWS = 50;
 
-    private int tileSize;
-    private int[][] map = new int[COLUMNS][ROWS];
     private Random rnd = new Random();
-    private ArrayList<WorldObject> objectHitbox = new ArrayList<>();
     private int enemyCount = 0;
     private int enemyId = 4;
-    private Player player;
+    
+    private int enemyCountZone[];
 
-    public GameWorld(int tileSize, Player player) {
-        this.tileSize = tileSize;
-        this.player = player;
+    public GameWorld(int tileSize, Player player ) {
+    	super(tileSize, player, COLUMNS, ROWS);
         this.generateMap();
     }
 
-    /** Da chiamare a ogni aggiornamento: se un nemico è stato sconfitto ne compare uno nuovo. */
+    //se un nemico è stato sconfitto ne compare uno nuovo
     public void update() {
         this.checkEnemy();
     }
@@ -64,7 +61,7 @@ public class GameWorld extends Map {
             if (!this.putObject(4, new Bush(this.rnd.nextInt(2, 48) * this.tileSize + 10, this.rnd.nextInt(11, 48) * this.tileSize + 10, this.tileSize - 20, this.tileSize - 20))) i--;
         this.checkEnemy();
     }
-
+    
     // controllo quanti nemici ci sono, se un nemico è stato sconfitto ne aggiungo uno nuovo
     private void checkEnemy() {
         while (this.enemyCount < 5) {
@@ -74,43 +71,11 @@ public class GameWorld extends Map {
         }
     }
 
-    // funzione usata per mettere tutti gli oggetti
-    private boolean putObject(int objectNum, WorldObject object) {
-        if (this.map[object.getX() / this.tileSize][object.getY() / this.tileSize] == 0) {
-            this.map[object.getX() / this.tileSize][object.getY() / this.tileSize] = objectNum;
-            this.objectHitbox.add(object);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /** True se nel rettangolo c'è un ostacolo (nemico, albero o muro). */
-    public boolean isBlocked(Box area) {
-        for (WorldObject object : this.objectHitbox) {
-            if ((object instanceof Enemy || object instanceof Tree || object instanceof Wall || object instanceof Shop) && area.intersects(object.getHitbox())) return true;
-        }
-        return false;
-    }
-
     /** Calpesta i cespugli che si trovano nel rettangolo. */
     public void trampleBushes(Box area) {
         for (WorldObject object : this.objectHitbox) {
             if (object instanceof Bush && area.intersects(object.getHitbox())) ((Bush) object).trample();
         }
-    }
-
-    /** Il nemico a portata di combattimento rispetto al giocatore, oppure null. */
-    public Object findEnemyInRange(Player player) {
-        Object found = null;
-        for (WorldObject object : this.objectHitbox) {
-            if (object instanceof Enemy && ((Enemy) object).getInteractRange().intersects(player.getHitbox())) {
-                found = (Enemy) object;
-            } else if(object instanceof Shop && ((Shop) object).getInteractRange().intersects(player.getHitbox())) {
-            	found = (Shop) object;
-            }
-        }
-        return found;
     }
 
     public void removeEnemy(Enemy enemy) {
@@ -122,21 +87,5 @@ public class GameWorld extends Map {
     /** True se la casella (x, y) è coperta d'erba (cioè non è un muro). */
     public boolean isGrassTile(int x, int y) {
         return this.map[x][y] != 1;
-    }
-
-    public ArrayList<WorldObject> getObjects() {
-        return this.objectHitbox;
-    }
-
-    public int getTileSize() {
-        return this.tileSize;
-    }
-
-    public int getColumns() {
-        return COLUMNS;
-    }
-
-    public int getRows() {
-        return ROWS;
     }
 }

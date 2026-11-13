@@ -5,17 +5,9 @@ import java.util.ArrayList;
 public class Castle extends Map{
 	private static final int COLUMNS = 10;
     private static final int ROWS = 10;
-    
 
-    private int tileSize;
-    private int[][] map = new int[COLUMNS][ROWS];
-    private Player player;
-    private ArrayList<WorldObject> objectHitbox = new ArrayList<>();
-
-    
-    public Castle(int tileSize, Player player) {
-    	this.player = player;
-    	this.tileSize = tileSize;
+    public Castle(int tileSize, Player player, int mapX, int mapY, ArrayList<WorldObject> objectHitbox) {
+    	super(tileSize, player, COLUMNS, ROWS);
     	this.generateMap();
     }
     
@@ -32,14 +24,4 @@ public class Castle extends Map{
         }
     }
     
-    // funzione usata per mettere tutti gli oggetti
-    private boolean putObject(int objectNum, WorldObject object) {
-        if (this.map[object.getX() / this.tileSize][object.getY() / this.tileSize] == 0) {
-            this.map[object.getX() / this.tileSize][object.getY() / this.tileSize] = objectNum;
-            this.objectHitbox.add(object);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
