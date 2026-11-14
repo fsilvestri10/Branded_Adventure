@@ -37,6 +37,12 @@ public final class Assets {
     public static final BufferedImage ARMOR;
     public static final BufferedImage CHAINMAIL;
     public static final BufferedImage BF_SWORD;
+    public static final BufferedImage CASTLE;
+    public static final BufferedImage PATH_TILE;
+    public static final BufferedImage COOLDOWN_ICON;
+    public static final BufferedImage FENCE;
+    public static final BufferedImage SHOP_BACKGROUND;
+    public static final BufferedImage SHOP_FRAME;
     
     
     
@@ -66,6 +72,12 @@ public final class Assets {
             ARMOR = load("/Cloth_Armor.png");
             BUILDINGS = load("/Buildings.png");
             SHOP = BUILDINGS.getSubimage(546, 16, 120, 160);
+            CASTLE = load("/Castle2.png");
+            PATH_TILE = CASTLE.getSubimage(200, 328, 50, 50);
+            COOLDOWN_ICON = load("/Cooldown.png");
+            FENCE = load("/Fence.png");
+            SHOP_BACKGROUND = load("/Shop_background.png");
+            SHOP_FRAME = load("/Shop_frame.png");
             
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);

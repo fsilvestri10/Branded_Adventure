@@ -108,7 +108,7 @@ public class FightPanel extends JPanel {
         // mostra/nasconde l'immagine che indica che la skill è in cooldown
         for(int i = 0; i < this.battle.getPlayer().getSkills().size(); i++) {
         	if(this.battle.getPlayer().getSkills().get(i).getCooldown() != 0 && this.skillsOpened) 
-        		this.skillButtons[i].setIcon(new ImageIcon(Assets.ARMOR.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
+        		this.skillButtons[i].setIcon(new ImageIcon(Assets.COOLDOWN_ICON.getScaledInstance(48, 48, Image.SCALE_SMOOTH)));
              else 
             	this.skillButtons[i].setIcon(null);
         }

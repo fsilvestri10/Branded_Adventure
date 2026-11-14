@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import progetto.model.Bush;
 import progetto.model.Enemy;
+import progetto.model.Fence;
 import progetto.model.GameWorld;
 import progetto.model.Player;
 import progetto.model.Shop;
@@ -107,6 +108,8 @@ public class MapPanel extends JPanel {
 
                 // posiziono l'erba nella mappa
                 if (this.world.isGrassTile(x, y)) g2.drawImage(Assets.GRASS_TILE, screenX, screenY, tileSize, tileSize, null);
+                
+                if (this.world.isPathTile(x, y)) g2.drawImage(Assets.PATH_TILE, screenX, screenY, tileSize, tileSize, null);
             }
         }
     }
@@ -119,6 +122,8 @@ public class MapPanel extends JPanel {
             g2.drawImage(Assets.WALL, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
         } else if (o instanceof Tree) {
             g2.drawImage(Assets.TREE, screenX - 20, screenY - 20, o.getWidth() + 40, o.getHeight() + 40, null);
+        } else if (o instanceof Fence) {
+            g2.drawImage(Assets.FENCE, screenX - 10, screenY - 30, o.getWidth() + 25, o.getHeight() + 20, null);
         } else if (o instanceof Bush) {
             BufferedImage img = ((Bush) o).isTrampled() ? Assets.BUSH_TRAMPLED : Assets.BUSH;
             g2.drawImage(img, screenX, screenY, o.getWidth(), o.getHeight(), null);
@@ -207,6 +212,5 @@ public class MapPanel extends JPanel {
         	g2.drawString(this.player.getEquipment(0).getName(), 30, 680);
         	g2.drawString(this.player.getEquipment(1).getName(), 30, 720);
         }
-        
     }
 }

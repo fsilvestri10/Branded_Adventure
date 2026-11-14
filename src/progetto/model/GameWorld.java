@@ -38,9 +38,20 @@ public class GameWorld extends Map {
         for (int i = 0; i < COLUMNS; i++) {
             for (int j = 0; j < ROWS; j++) {
                 if (j == 49 || j == 9 || (j < 9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) || (i == 0 || i == 49) && j > 9) {
+                	// muri
                     map[i][j] = 1;
                     this.objectHitbox.add(new Wall(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize));
-                } else {
+                } else if  ((j > 9 && j < 50) && (i > 23 && i < 26) ||
+                		j == 26 || j == 27 || (i == 12 || i == 13) && (j == 25 || j == 28) ||
+                		(i == 35 || i == 36) && (j == 25 || j == 28)) {
+                	// sentieri
+                	map[i][j] = 7;
+            	} else  if ((j == 25 || j == 28) && (i != 12 && i != 13 && i != 35 && i != 36)) {
+            		// staccionate
+            		map[i][j] = 8;
+            		this.objectHitbox.add(new Fence(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize));
+            	} else {
+            		// erba
                     map[i][j] = 0;
                 }
             }
@@ -65,7 +76,7 @@ public class GameWorld extends Map {
     // controllo quanti nemici ci sono, se un nemico è stato sconfitto ne aggiungo uno nuovo
     private void checkEnemy() {
         while (this.enemyCount < 5) {
-            if (!this.putObject(3, new Enemy(this.enemyId, "pus", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), this.rnd.nextInt(14, 36) * this.tileSize, this.rnd.nextInt(23, 36) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCount--;
+            if (!this.putObject(3, new Enemy(this.enemyId, "Skeleton", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), this.rnd.nextInt(14, 36) * this.tileSize, this.rnd.nextInt(23, 36) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCount--;
             this.enemyCount++;
             this.enemyId++;
         }
@@ -87,5 +98,9 @@ public class GameWorld extends Map {
     /** True se la casella (x, y) è coperta d'erba (cioè non è un muro). */
     public boolean isGrassTile(int x, int y) {
         return this.map[x][y] != 1;
+    }
+    
+    public boolean isPathTile(int x, int y) {
+        return this.map[x][y] == 7;
     }
 }

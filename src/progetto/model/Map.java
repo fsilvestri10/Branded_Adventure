@@ -34,7 +34,7 @@ public abstract class Map {
     /** True se nel rettangolo c'è un ostacolo (nemico, albero o muro). */
     public boolean isBlocked(Box area) {
         for (WorldObject object : this.objectHitbox) {
-            if ((object instanceof Enemy || object instanceof Tree || object instanceof Wall || object instanceof Shop) && area.intersects(object.getHitbox())) return true;
+            if ((object instanceof Enemy || object instanceof Tree || object instanceof Wall || object instanceof Shop || object instanceof Fence) && area.intersects(object.getHitbox())) return true;
         }
         return false;
     }

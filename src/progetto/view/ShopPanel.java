@@ -43,7 +43,8 @@ public class ShopPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         int w = getWidth();
         int h = getHeight();
-        g2.drawImage(Assets.BACKGROUND, 0, 0, w, h, null);
+        g2.drawImage(Assets.SHOP_BACKGROUND, 0, 0, w, h, null);
+        g2.drawImage(Assets.SHOP_FRAME, 50, -20, 900, 700, null);
         
         g2.setColor(new Color(0, 0, 0, 128));
         g2.fillRect(0, h - h / 5, w, h / 5);
