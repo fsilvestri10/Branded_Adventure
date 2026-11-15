@@ -207,31 +207,18 @@ public class MapPanel extends JPanel {
         g2.setColor(new Color(0, 0, 0, 128));
         g2.fillRect(0, 600, 200, 200);
         g2.setColor(Color.YELLOW);
-        g2.setFont(new Font("Simplex", Font.BOLD, 25));
+        g2.setFont(Assets.PIXEL_FONT.deriveFont(48f));
         g2.drawImage(Assets.GOLD, 0, 730, 30, 30, null);
         g2.drawString("Gold: " + this.player.getGold(), 30, 755);
         g2.drawString("Equipment: ", 0, 640);
         
-        if(this.player.getEquipmentSize() != 0) {
-        	switch (this.player.getEquipment(0).getName()) {
-        		case "Sword":
-        			g2.drawImage(Assets.SWORD, 0, 655, 30, 30, null);
-        			break;
-        		case "BFSword":
-        			g2.drawImage(Assets.BF_SWORD, 0, 655, 30, 30, null);
-        			break;
-        	}
-        	
-        	switch (this.player.getEquipment(1).getName()) {
-        		case "Armor":
-        			g2.drawImage(Assets.ARMOR, 0, 695, 30, 30, null);
-        			break;
-        		case "Chainmail":
-        			g2.drawImage(Assets.CHAINMAIL, 0, 695, 30, 30, null);
-        			break;
-        	}
-        	g2.drawString(this.player.getEquipment(0).getName(), 30, 680);
-        	g2.drawString(this.player.getEquipment(1).getName(), 30, 720);
-        }
-    }
+        // ARMA
+		g2.drawImage(this.player.getEquipment(0).getItemImage(), 0, 655, 30, 30, null);
+        g2.drawString(this.player.getEquipment(0).getName(), 30, 680);
+        
+        // ARMATURA
+		g2.drawImage(this.player.getEquipment(1).getItemImage(), 0, 695, 30, 30, null);
+        g2.drawString(this.player.getEquipment(1).getName(), 30, 720);
+       }
+   // }
 }

@@ -112,8 +112,11 @@ public class GameController {
     	this.onMap = false;
     	ShopPanel shopPanel = new ShopPanel ();
     	new ShopController(shopPanel, player, shop, this::onExitShop);
+    	
+        this.audio.play("Shop");
     	this.frame.showPanel(shopPanel);
     }
+    
      private void startBattle(Enemy enemy) {
         this.onMap = false;
         this.world.removeEnemy(enemy);
@@ -129,7 +132,7 @@ public class GameController {
      private void onExitShop() {
     	 this.onMap = true;
     	 this.frame.showPanel(this.mapPanel);
-    	 
+    	 this.audio.stop();
      }
 
      private void onMenu() {

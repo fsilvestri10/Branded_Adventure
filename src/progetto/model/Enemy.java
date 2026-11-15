@@ -29,6 +29,7 @@ public class Enemy extends Character {
                 break;
         }
     }
+    
     public void move(int dx, int dy, GameWorld world, Player player) {
     	this.moving = (dx != 0 || dy != 0);
     	// la direzione serve alla view per scegliere lo sprite
