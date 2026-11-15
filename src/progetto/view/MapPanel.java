@@ -159,6 +159,24 @@ public class MapPanel extends JPanel {
             		sheet = Assets.ENEMY;
             		break;
             }
+            switch(enemy.getDirection()) {
+            	case DOWN:
+            		drawEnemyWalking(0);
+            		break;
+				case LEFT:
+					drawEnemyWalking(1);
+					break;
+				case RIGHT:
+					drawEnemyWalking(2);
+					break;
+				case UP:
+            		drawEnemyWalking(4);
+            		break;
+				default:
+					break;
+            }
+            
+            
             anim.frame = sheet.getSubimage(96, this.rnd.nextInt(4) * 96, 96, 96);
             anim.counter = 0;
         }
@@ -167,6 +185,9 @@ public class MapPanel extends JPanel {
         g2.setColor(Color.BLACK);
         g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
         g2.drawString("[ LV. " + enemy.getLevel() + " ]", screenX - 3, screenY - 7);
+    }
+    private void drawEnemyWalking(int i) {
+    	
     }
 
     // il giocatore sta sempre al centro dello schermo

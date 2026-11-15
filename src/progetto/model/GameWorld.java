@@ -10,25 +10,25 @@ public class GameWorld extends Map {
     private static final int ROWS = 50;
 
     private Random rnd = new Random();
-    private int enemyCount = 0;
     private int enemyId = 4;
     
-    private int enemyCountZone[];
+    private int enemyCountZone[]  = new int[4];
 
     public GameWorld(int tileSize, Player player ) {
     	super(tileSize, player, COLUMNS, ROWS);
-        this.generateMap();
+        for(int i = 0; i < 4; i++) this.enemyCountZone[i] = 0;
+    	this.generateMap();
     }
 
     //se un nemico è stato sconfitto ne compare uno nuovo
     public void update() {
-        this.checkEnemy();
+    	for(int i = 0; i < 4; i++) this.checkEnemy(i);
     }
 
     /** Riporta il mondo allo stato iniziale (usato dopo un game over). */
     public void reset() {
         this.objectHitbox.clear();
-        this.enemyCount = 0;
+        for(int i = 0; i < 4; i++) this.enemyCountZone[i] = 0;
         this.enemyId = 4;
         this.generateMap();
     }
@@ -42,11 +42,11 @@ public class GameWorld extends Map {
                     map[i][j] = 1;
                     this.objectHitbox.add(new Wall(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize));
                 } else if  ((j > 9 && j < 50) && (i > 23 && i < 26) ||
-                		j == 26 || j == 27 || (i == 12 || i == 13) && (j == 25 || j == 28) ||
-                		(i == 35 || i == 36) && (j == 25 || j == 28)) {
+                		j == 29 || j == 30 || (i == 12 || i == 13) && (j == 28 || j == 31) ||
+                		(i == 37 || i == 38) && (j == 28 || j == 31)) {
                 	// sentieri
                 	map[i][j] = 7;
-            	} else  if ((j == 25 || j == 28) && (i != 12 && i != 13 && i != 35 && i != 36)) {
+            	} else  if ((j == 28 || j == 31) && (i != 12 && i != 13 && i != 37 && i != 38)) {
             		// staccionate
             		map[i][j] = 8;
             		this.objectHitbox.add(new Fence(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize));
@@ -65,21 +65,34 @@ public class GameWorld extends Map {
         
         this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize * 3, this.tileSize * 4, this.player));
         
-        
         for (int i = 0; i < 10; i++)
             if (!this.putObject(2, new Tree(this.rnd.nextInt(2, 48) * this.tileSize, this.rnd.nextInt(11, 48) * this.tileSize, this.tileSize, this.tileSize))) i--;
         for (int i = 0; i < 30; i++)
             if (!this.putObject(4, new Bush(this.rnd.nextInt(2, 48) * this.tileSize + 10, this.rnd.nextInt(11, 48) * this.tileSize + 10, this.tileSize - 20, this.tileSize - 20))) i--;
-        this.checkEnemy();
+        
+        for(int i = 0; i < 4; i++) this.checkEnemy(i);
     }
     
     // controllo quanti nemici ci sono, se un nemico è stato sconfitto ne aggiungo uno nuovo
-    private void checkEnemy() {
-        while (this.enemyCount < 5) {
-            if (!this.putObject(3, new Enemy(this.enemyId, "Skeleton", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), this.rnd.nextInt(14, 36) * this.tileSize, this.rnd.nextInt(23, 36) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCount--;
-            this.enemyCount++;
-            this.enemyId++;
-        }
+    private void checkEnemy(int i) {
+    	while(this.enemyCountZone[i] < 5) {
+	    	switch(i) {
+	    		case 0:
+	    			if (!this.putObject(3, new Enemy(this.enemyId, "Skeleton", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), (this.rnd.nextInt(0, 20)) * this.tileSize, (10 + this.rnd.nextInt(0, 20)) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCountZone[i]--;
+	    			break;
+	    		case 1:
+	    			if (!this.putObject(3, new Enemy(this.enemyId, "Skeleton", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), (this.rnd.nextInt(0, 20)) * this.tileSize, (30 + this.rnd.nextInt(0, 20)) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCountZone[i]--;
+	    			break;
+	    		case 2:
+	    			if (!this.putObject(3, new Enemy(this.enemyId, "Skeleton", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), (30 + this.rnd.nextInt(0, 20)) * this.tileSize, (10 + this.rnd.nextInt(0, 20)) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCountZone[i]--;
+	    			break;
+	    		case 3:
+	    			if (!this.putObject(3, new Enemy(this.enemyId, "Skeleton", 10, Math.max(1, this.player.getLevel()+this.rnd.nextInt(-1,+2)), (30 + this.rnd.nextInt(0, 20)) * this.tileSize, (30 + this.rnd.nextInt(0, 20)) * this.tileSize, this.tileSize, this.tileSize))) this.enemyCountZone[i]--;
+	    			break;
+	    	}
+	    	this.enemyCountZone[i]++;
+	        this.enemyId++;
+    	}
     }
 
     /** Calpesta i cespugli che si trovano nel rettangolo. */
@@ -92,7 +105,14 @@ public class GameWorld extends Map {
     public void removeEnemy(Enemy enemy) {
         this.objectHitbox.remove(enemy);
         // i boss non vengono contati tra i nemici da rimpiazzare
-        if (!enemy.isBoss()) this.enemyCount--;
+        if (!enemy.isBoss()) removeEnemyCount(enemy);
+    }
+    
+    private void removeEnemyCount(Enemy enemy) {
+    	if(enemy.getHitbox().intersects(new Box(0, 500, 1000, 1000))) this.enemyCountZone[0]--;
+    	else if(enemy.getHitbox().intersects(new Box(0, 1500, 1000, 1000))) this.enemyCountZone[1]--;
+    	else if(enemy.getHitbox().intersects(new Box(1500, 500, 1000, 1000))) this.enemyCountZone[2]--;
+    	else if(enemy.getHitbox().intersects(new Box(1500, 1500, 1000, 1000))) this.enemyCountZone[3]--;
     }
 
     /** True se la casella (x, y) è coperta d'erba (cioè non è un muro). */

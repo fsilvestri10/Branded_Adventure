@@ -9,7 +9,7 @@ public class Enemy extends Character {
     private int id;
 
     public Enemy(int id, String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height) {
-        super(name, totalHP, level, tileWorldX, tileWorldY, width, height);
+        super(name, totalHP, level, tileWorldX, tileWorldY, width, height, Direction.DOWN);
         this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
         this.id = id;
         // le ricompense variano a seconda del livello
@@ -27,6 +27,30 @@ public class Enemy extends Character {
                 break;
             case 3:
                 break;
+        }
+    }
+    public void move(int dx, int dy, GameWorld world, Player player) {
+    	this.moving = (dx != 0 || dy != 0);
+    	// la direzione serve alla view per scegliere lo sprite
+        if (dy < 0) this.direction = Direction.UP;
+        if (dy > 0) this.direction = Direction.DOWN;
+        if (dx < 0) this.direction = Direction.LEFT;
+        if (dx > 0) this.direction = Direction.RIGHT;
+
+        // controllo movimento asse x, se non ci sono ostacoli mi muovo
+        Box nextX = new Box(this.tileWorldX + dx, this.tileWorldY, this.width, this.height);
+        world.trampleBushes(nextX);
+        if (!world.isBlocked(nextX) && !nextX.intersects(player.getHitbox())) {
+        	this.tileWorldX += dx;
+        	this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
+        }
+
+        // controllo movimento asse y, se non ci sono ostacoli mi muovo
+        Box nextY = new Box(this.tileWorldX, this.tileWorldY + dy, this.width, this.height);
+        world.trampleBushes(nextY);
+        if (!world.isBlocked(nextY) && !nextY.intersects(player.getHitbox())) {
+        	this.tileWorldY += dy;
+        	this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
         }
     }
 

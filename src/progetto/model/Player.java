@@ -9,14 +9,11 @@ public class Player extends Character {
     // velocità in pixel per ogni aggiornamento (il controller la usa per calcolare dx e dy)
     public static final int SPEED = 10;
 
-    private Direction direction = Direction.DOWN;
-    private boolean moving = false;
     private int exp;
     private int gold;
-    
 
     public Player(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height) {
-        super(name, totalHP, level, tileWorldX, tileWorldY, width, height);
+        super(name, totalHP, level, tileWorldX, tileWorldY, width, height, Direction.DOWN);
         
     }
 
@@ -45,7 +42,6 @@ public class Player extends Character {
         if (!world.isBlocked(nextY)) this.tileWorldY += dy;
     }
     
-
     /** Usa l'abilità in posizione index (per ora esiste solo la cura). */
     public void useSkill(int index, Enemy enemy) {
         //if (index < 0 || index >= this.getSkills().size()) return;
@@ -91,14 +87,6 @@ public class Player extends Character {
         this.moving = false;
         this.direction = Direction.DOWN;
         this.heal(this.getTotalHP());
-    }
-
-    public Direction getDirection() {
-        return this.direction;
-    }
-
-    public boolean isMoving() {
-        return this.moving;
     }
 
     public int getExp() {

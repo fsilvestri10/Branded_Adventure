@@ -12,8 +12,10 @@ public abstract class Character extends WorldObject {
     private ArrayList<Item> equipment;
     private ArrayList<Skill> skills;
     private int status;
+    protected Direction direction;
+    protected boolean moving = false;
 
-    public Character(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height) {
+    public Character(String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height, Direction direction) {
         super(tileWorldX, tileWorldY, width, height);
         this.name = name;
         this.level = level;
@@ -25,7 +27,9 @@ public abstract class Character extends WorldObject {
         this.status = 0;
         this.equipment.add(0, ItemDatabase.getSword());
         this.equipment.add(1, ItemDatabase.getArmor());
+        this.direction = direction;
     }
+    
     public void attack(Character target) {
         // l'armatura del bersaglio è considerata dentro takeDamage()
     	
@@ -108,5 +112,11 @@ public abstract class Character extends WorldObject {
     }
     public void changeEquipment(int i,Item item) {
     	this.equipment.set(i, item);
+    }
+    public Direction getDirection() {
+        return this.direction;
+    }
+    public boolean isMoving() {
+        return this.moving;
     }
 }

@@ -17,7 +17,7 @@ public class Main {
 
                 // MODEL
                 
-                Player player = new Player("ez", 1000000, 1, GameController.SPAWN_TILE * tileSize, GameController.SPAWN_TILE * tileSize, tileSize, tileSize);
+                Player player = new Player("ez", 1000000, 1, GameController.SPAWN_TILE_X * tileSize, GameController.SPAWN_TILE_Y * tileSize, tileSize, tileSize);
                 GameWorld world = new GameWorld(tileSize, player);
                 // VIEW e input
                 KeyHandler keys = new KeyHandler();
