@@ -34,12 +34,12 @@ public class Player extends Character {
         // controllo movimento asse x, se non ci sono ostacoli mi muovo
         Box nextX = new Box(this.tileWorldX + dx, this.tileWorldY, this.width, this.height);
         world.trampleBushes(nextX);
-        if (!world.isBlocked(nextX)) this.tileWorldX += dx;
+        if (!world.isBlocked(nextX, this)) this.tileWorldX += dx;
 
         // controllo movimento asse y, se non ci sono ostacoli mi muovo
         Box nextY = new Box(this.tileWorldX, this.tileWorldY + dy, this.width, this.height);
         world.trampleBushes(nextY);
-        if (!world.isBlocked(nextY)) this.tileWorldY += dy;
+        if (!world.isBlocked(nextY, this)) this.tileWorldY += dy;
     }
     
     /** Usa l'abilità in posizione index (per ora esiste solo la cura). */

@@ -29,21 +29,12 @@ import progetto.model.WorldObject;
 public class MapPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static final int ENEMY_FRAME_TICKS = 60;
 
     private final Player player;
     private final GameWorld world;
     private final Sprite playerSprite = new Sprite(Assets.PLAYER_SHEET);
-    private final Random rnd = new Random();
     private boolean fightHint = false;
-
-    // animazione di ogni nemico (sprite scelto a caso ogni tanto); WeakHashMap: i nemici sconfitti vengono liberati
-    private final Map<Enemy, EnemyAnim> enemyAnims = new WeakHashMap<>();
-
-    private static class EnemyAnim {
-        int counter = ENEMY_FRAME_TICKS; // parte già al limite, così il primo frame viene scelto subito
-        BufferedImage frame;
-    }
+    private final Map<Enemy, Sprite> enemySprites = new WeakHashMap<>();
 
     public MapPanel(KeyListener keys, GameWorld world, Player player) {
         // permette al pannello di ricevere l'input da tastiera
@@ -52,11 +43,6 @@ public class MapPanel extends JPanel {
 
         this.world = world;
         this.player = player;
-    }
-
-    /** Fa avanzare l'animazione del giocatore (il controller lo chiama a ogni aggiornamento). */
-    public void updateAnimation() {
-        this.playerSprite.update(this.player.isMoving());
     }
 
     /** Mostra o nasconde la scritta "E per combattere". */
@@ -135,61 +121,48 @@ public class MapPanel extends JPanel {
     }
 
     private void drawEnemy(Graphics2D g2, Enemy enemy, int screenX, int screenY) {
-        EnemyAnim anim = this.enemyAnims.computeIfAbsent(enemy, k -> new EnemyAnim());
+    	if(!enemy.isBoss() ) {
+            BufferedImage frame = this.spriteOf(enemy).getCurrentSprite(enemy.getDirection());
 
-        // ogni tanto scelgo a caso una delle 4 righe dello sprite sheet
-        anim.counter++;
-        if (anim.counter >= ENEMY_FRAME_TICKS) {
-            //BufferedImage sheet = enemy.isBoss() ? Assets.BOSS1 : Assets.ENEMY;
-        	BufferedImage sheet = null;
-            switch(enemy.getId()) {
-            	case 0:
-            		sheet = Assets.BOSS1;
-            		break;
-            	case 1:
-            		sheet = Assets.BOSS2;
-            		break;
-            	case 2:
-            		sheet = Assets.BOSS1;
-            		break;
-            	case 3:
-            		sheet = Assets.BOSS1;
-            		break;
-            	default:
-            		sheet = Assets.ENEMY;
-            		break;
-            }
-            switch(enemy.getDirection()) {
-            	case DOWN:
-            		drawEnemyWalking(0);
-            		break;
-				case LEFT:
-					drawEnemyWalking(1);
-					break;
-				case RIGHT:
-					drawEnemyWalking(2);
-					break;
-				case UP:
-            		drawEnemyWalking(4);
-            		break;
-				default:
-					break;
-            }
-            
-            
-            anim.frame = sheet.getSubimage(96, this.rnd.nextInt(4) * 96, 96, 96);
-            anim.counter = 0;
+            g2.drawImage(frame, screenX - 6, screenY - 6, enemy.getWidth() + 12, enemy.getHeight() + 12, null);
+            g2.setColor(Color.BLACK);
+            g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
+            g2.drawString("[ LV. " + enemy.getLevel() + " ]", screenX - 3, screenY - 7);
+        } else {
+            drawBoss(enemy, g2, screenX, screenY);
         }
-
-        g2.drawImage(anim.frame, screenX - 6, screenY - 6, enemy.getWidth() + 12, enemy.getHeight() + 12, null);
-        g2.setColor(Color.BLACK);
-        g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
-        g2.drawString("[ LV. " + enemy.getLevel() + " ]", screenX - 3, screenY - 7);
     }
-    private void drawEnemyWalking(int i) {
-    	
+    public void updateAnimation() {
+        this.playerSprite.update(this.player.isMoving());
+        for (WorldObject object : this.world.getObjects()) {
+            if (object instanceof Enemy && !((Enemy) object).isBoss()) {
+                Enemy enemy = (Enemy) object;
+                this.spriteOf(enemy).update(enemy.isMoving());
+            }
+        }
     }
-
+    private void drawBoss(Enemy enemy, Graphics2D g2, int screenX, int screenY) {
+    	BufferedImage sheet = null;
+    	switch(enemy.getId()) {
+	    	case 0:
+	    		sheet = Assets.BOSS1;
+	    		break;
+	    	case 1:
+	    		sheet = Assets.BOSS2;
+	    		break;
+	    	case 2:
+	    		sheet = Assets.BOSS1;
+	    		break;
+	    	case 3:
+	    		sheet = Assets.BOSS1;
+	    		break;
+	    	default:
+	    		sheet = Assets.ENEMY;
+	    		break;
+	    }
+    	g2.drawImage(sheet.getSubimage(96, 96, 96, 96), screenX - 6, screenY - 6, enemy.getWidth() + 12, enemy.getHeight() + 12, null);
+    }
+    
     // il giocatore sta sempre al centro dello schermo
     private void drawPlayer(Graphics2D g2, int cx, int cy) {
         BufferedImage frame = this.playerSprite.getCurrentSprite(this.player.getDirection());
@@ -213,12 +186,13 @@ public class MapPanel extends JPanel {
         g2.drawString("Equipment: ", 0, 640);
         
         // ARMA
-		g2.drawImage(this.player.getEquipment(0).getItemImage(), 0, 655, 30, 30, null);
+        g2.drawImage(Assets.itemImage(this.player.getEquipment(0)), 0, 655, 30, 30, null);
         g2.drawString(this.player.getEquipment(0).getName(), 30, 680);
         
         // ARMATURA
-		g2.drawImage(this.player.getEquipment(1).getItemImage(), 0, 695, 30, 30, null);
-        g2.drawString(this.player.getEquipment(1).getName(), 30, 720);
-       }
-   // }
+        g2.drawImage(Assets.itemImage(this.player.getEquipment(1)), 0, 695, 30, 30, null);        g2.drawString(this.player.getEquipment(1).getName(), 30, 720);
+    }
+    private Sprite spriteOf(Enemy enemy) {
+        return this.enemySprites.computeIfAbsent(enemy, k -> new Sprite(Assets.ENEMY));
+    }
 }

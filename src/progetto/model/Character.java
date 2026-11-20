@@ -119,4 +119,7 @@ public abstract class Character extends WorldObject {
     public boolean isMoving() {
         return this.moving;
     }
+    public void setMoving(boolean moving) {
+    	this.moving = moving;
+    }
 }

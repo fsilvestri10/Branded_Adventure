@@ -37,9 +37,6 @@ public class GameController {
     private final AudioPlayer audio = new AudioPlayer();
 
     private boolean onMap = true;
-    private int enemyCounter;
-    
-    private Random rnd = new Random();
 
     public GameController(GameFrame frame, KeyHandler keys, GameWorld world, Player player, MapPanel mapPanel) {
         this.frame = frame;
@@ -47,7 +44,6 @@ public class GameController {
         this.world = world;
         this.player = player;
         this.mapPanel = mapPanel;
-        this.enemyCounter = 0;
     }
 
     /** Mostra la mappa e fa partire il ciclo di gioco. */
@@ -74,18 +70,6 @@ public class GameController {
         this.player.move(dx, dy, this.world);
         this.mapPanel.updateAnimation();
         this.world.update();
-        
-        this.enemyCounter++;
-        int moveX = 0;
-        int moveY = 0;
-        if(this.enemyCounter == 100) {
-        	for(int i = 0; i < this.world.getObjects().size(); i++) {
-        		moveX = this.rnd.nextInt(-1, 2);
-        		if(moveX == 0) moveY = this.rnd.nextInt(-1, 2);
-        		if(this.world.getObjects().get(i) instanceof Enemy && !((Enemy)this.world.getObjects().get(i)).isBoss()) ((Enemy)this.world.getObjects().get(i)).move(moveX*50, moveY*50, this.world, this.player);
-        	}
-        	this.enemyCounter = 0;
-        }
 
         if(this.keys.escPressed) {
         	this.keys.escPressed = false;

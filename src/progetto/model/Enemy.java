@@ -1,5 +1,7 @@
 package progetto.model;
 
+import java.util.Random;
+
 /** MODEL: nemico (normale o boss). Nessuna immagine: la view sceglie lo sprite con isBoss(). */
 public class Enemy extends Character {
 
@@ -8,8 +10,20 @@ public class Enemy extends Character {
     private Box interactRange;
     private int id;
 
+    // movimento
+    private static final Random RND = new Random();
+    private static final int SPEED = 2;            // pixel per aggiornamento
+    private static final int WANDER_RANGE = 150;   // quanto può allontanarsi dal punto di nascita
+    private final int spawnX, spawnY;
+    
+    private int waitTicks = RND.nextInt(60, 180);
+    private int walkTicks = 0;           
+    private int stepX, stepY;    
+    
     public Enemy(int id, String name, int totalHP, int level, int tileWorldX, int tileWorldY, int width, int height) {
         super(name, totalHP, level, tileWorldX, tileWorldY, width, height, Direction.DOWN);
+        this.spawnX = tileWorldX;
+        this.spawnY = tileWorldY;
         this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
         this.id = id;
         // le ricompense variano a seconda del livello
@@ -30,8 +44,9 @@ public class Enemy extends Character {
         }
     }
     
-    public void move(int dx, int dy, GameWorld world, Player player) {
-    	this.moving = (dx != 0 || dy != 0);
+    public boolean move(int dx, int dy, GameWorld world, Player player) {
+    	boolean moved = false;
+    	
     	// la direzione serve alla view per scegliere lo sprite
         if (dy < 0) this.direction = Direction.UP;
         if (dy > 0) this.direction = Direction.DOWN;
@@ -41,18 +56,24 @@ public class Enemy extends Character {
         // controllo movimento asse x, se non ci sono ostacoli mi muovo
         Box nextX = new Box(this.tileWorldX + dx, this.tileWorldY, this.width, this.height);
         world.trampleBushes(nextX);
-        if (!world.isBlocked(nextX) && !nextX.intersects(player.getHitbox())) {
+        if (this.canGo(nextX, world, player)) {
         	this.tileWorldX += dx;
-        	this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
+        	moved = moved || dx != 0;        
         }
 
         // controllo movimento asse y, se non ci sono ostacoli mi muovo
         Box nextY = new Box(this.tileWorldX, this.tileWorldY + dy, this.width, this.height);
         world.trampleBushes(nextY);
-        if (!world.isBlocked(nextY) && !nextY.intersects(player.getHitbox())) {
+        if (this.canGo(nextY, world, player)) {
         	this.tileWorldY += dy;
-        	this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
+        	moved = moved || dy != 0;
         }
+        this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
+        return moved;
+    }
+    private boolean canGo(Box next, GameWorld world, Player player) {
+    	if (Math.abs(next.getX() - this.spawnX) > WANDER_RANGE || Math.abs(next.getY() - this.spawnY) > WANDER_RANGE) return false;
+        return !world.isBlocked(next, this) && !next.intersects(player.getHitbox());    
     }
 
     public void useSkill(Character target) {
@@ -69,7 +90,31 @@ public class Enemy extends Character {
     			break;
     	}
     }
-
+    public void update(GameWorld world, Player player) {
+    	// se il player è vicino il nemico si ferma
+        if (this.interactRange.intersects(player.getHitbox())) {
+            this.moving = false;
+            return;
+        }
+        if (this.walkTicks > 0) {
+            this.walkTicks--;
+            this.moving = this.move(this.stepX * SPEED, this.stepY * SPEED, world, player);
+            if (!this.moving) this.walkTicks = 0;   // c'è un ostacolo
+        } else {
+            this.moving = false;
+            this.waitTicks--;
+            if (this.waitTicks <= 0) this.startWalking();
+        }
+    }
+    // sceglie una direzione a caso e per quanto tempo camminare
+    private void startWalking() {
+        Direction d = Direction.values()[RND.nextInt(Direction.values().length)];
+        this.stepX = (d == Direction.LEFT) ? -1 : (d == Direction.RIGHT) ? 1 : 0;
+        this.stepY = (d == Direction.UP) ? -1 : (d == Direction.DOWN) ? 1 : 0;
+        this.walkTicks = RND.nextInt(25, 50);
+        this.waitTicks = RND.nextInt(60, 180);
+    }
+    
     /** I boss hanno id da 0 a 3, i nemici normali partono da 4. */
     public boolean isBoss() {
         return this.id < 4;
@@ -89,5 +134,12 @@ public class Enemy extends Character {
 
     public int getGold() {
         return this.goldDrop;
+    }
+    public int getSpawnX() {
+        return this.spawnX;
+    }
+
+    public int getSpawnY() {
+        return this.spawnY;
     }
 }

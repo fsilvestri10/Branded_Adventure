@@ -20,9 +20,14 @@ public class GameWorld extends Map {
     	this.generateMap();
     }
 
-    //se un nemico è stato sconfitto ne compare uno nuovo
+    //se un nemico è stato sconfitto ne compare uno nuovo e muove i nemici
     public void update() {
-    	for(int i = 0; i < 4; i++) this.checkEnemy(i);
+    	for (WorldObject object : this.objectHitbox) {
+            if (object instanceof Enemy && !((Enemy) object).isBoss()) {
+                ((Enemy) object).update(this, this.player);
+            }
+        }
+        for (int i = 0; i < 4; i++) this.checkEnemy(i);
     }
 
     /** Riporta il mondo allo stato iniziale (usato dopo un game over). */
@@ -109,10 +114,11 @@ public class GameWorld extends Map {
     }
     
     private void removeEnemyCount(Enemy enemy) {
-    	if(enemy.getHitbox().intersects(new Box(0, 500, 1000, 1000))) this.enemyCountZone[0]--;
-    	else if(enemy.getHitbox().intersects(new Box(0, 1500, 1000, 1000))) this.enemyCountZone[1]--;
-    	else if(enemy.getHitbox().intersects(new Box(1500, 500, 1000, 1000))) this.enemyCountZone[2]--;
-    	else if(enemy.getHitbox().intersects(new Box(1500, 1500, 1000, 1000))) this.enemyCountZone[3]--;
+        Box spawn = new Box(enemy.getSpawnX(), enemy.getSpawnY(), 1, 1);
+        if(spawn.intersects(new Box(0, 500, 1000, 1000))) this.enemyCountZone[0]--;
+        else if(spawn.intersects(new Box(0, 1500, 1000, 1000))) this.enemyCountZone[1]--;
+        else if(spawn.intersects(new Box(1500, 500, 1000, 1000))) this.enemyCountZone[2]--;
+        else if(spawn.intersects(new Box(1500, 1500, 1000, 1000))) this.enemyCountZone[3]--;
     }
 
     /** True se la casella (x, y) è coperta d'erba (cioè non è un muro). */

@@ -11,6 +11,8 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import progetto.model.Item;
+
 /**
  * VIEW: tutte le risorse grafiche del gioco,
  * caricate una volta sola.
@@ -136,7 +138,20 @@ public final class Assets {
 
         }
     }
-
+    public static BufferedImage itemImage(Item item) {
+        return switch (item.getId()) {
+            case SWORD -> SWORD;
+            case ARMOR -> ARMOR;
+            case BF_SWORD -> BF_SWORD;
+            case CHAINMAIL -> CHAINMAIL;
+            case STORMRAZOR -> STORMRAZOR;
+            case WINTERS_APPROACH -> WINTERS_APPROACH;
+            case BLACK_CLEAVER -> BLACK_CLEAVER;
+            case THORNMAIL -> THORNMAIL;
+            case INFINITY_EDGE -> INFINITY_EDGE;
+            case GARGOYLE_STONEPLATE -> GARGOYLE_STONEPLATE;
+        };
+    }
     private Assets() {}
     
     // METODO PER CARICARE LE IMMAGINI
