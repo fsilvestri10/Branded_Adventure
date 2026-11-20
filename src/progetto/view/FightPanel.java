@@ -125,6 +125,22 @@ public class FightPanel extends JPanel {
         g2.drawString("HP", w / 5 - w / 20, h - h / 10 + h / 15);
         g2.setFont(new Font("sanserif", Font.BOLD, w / 20));
         g2.drawString(this.player.getCurrentHP() + "/" + this.player.getTotalHP(), w / 5 + h / 10, h - h / 10 - 20);
+        BufferedImage status;
+        switch(this.player.getStatus()) {
+        	case -1:
+        		status = Assets.BLACK_CLEAVER;
+        		break;
+        	case 0:
+        		status = Assets.ARMOR;
+        		break;
+        	case 1:
+        		status = Assets.CHAINMAIL;
+        		break;
+        	default:
+        		status = null;
+        		break;
+        }
+        g2.drawImage(status, 200, 640, 40, 40, null);
     }
 
     private void drawEnemyBattle(Graphics2D g2, int w, int h) {

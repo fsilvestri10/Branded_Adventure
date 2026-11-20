@@ -64,9 +64,9 @@ public class GameWorld extends Map {
 
         // posiziono nemici, alberi e cespugli
         this.putObject(5, new Enemy(0, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
-        this.putObject(5, new Enemy(1, "Knight Boss", 100, 5, 20 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
-        this.putObject(5, new Enemy(2, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
-        this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
+        this.putObject(5, new Enemy(1, "Knight Boss", 100, 5, 45 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
+        this.putObject(5, new Enemy(2, "Skeleton Boss", 100, 5, 45 * this.tileSize, 45 * this.tileSize, this.tileSize, this.tileSize));
+        this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 45 * this.tileSize, this.tileSize, this.tileSize));
         
         this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize * 3, this.tileSize * 4, this.player));
         

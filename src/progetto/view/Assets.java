@@ -47,6 +47,7 @@ public final class Assets {
     public static final BufferedImage BF_SWORD;
     public static final BufferedImage CASTLE;
     public static final BufferedImage PATH_TILE;
+    public static final BufferedImage CASTLE_GATE;
     public static final BufferedImage COOLDOWN_ICON;
     public static final BufferedImage FENCE;
     public static final BufferedImage SHOP_BACKGROUND;
@@ -116,6 +117,7 @@ public final class Assets {
 
             CASTLE = load("/Castle2.png");
             PATH_TILE = CASTLE.getSubimage(200, 328, 50, 50);
+            CASTLE_GATE = CASTLE.getSubimage(315, 0, 100, 90);
 
             COOLDOWN_ICON = load("/Cooldown.png");
             FENCE = load("/Fence.png");

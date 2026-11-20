@@ -96,6 +96,8 @@ public class MapPanel extends JPanel {
                 if (this.world.isGrassTile(x, y)) g2.drawImage(Assets.GRASS_TILE, screenX, screenY, tileSize, tileSize, null);
                 
                 if (this.world.isPathTile(x, y)) g2.drawImage(Assets.PATH_TILE, screenX, screenY, tileSize, tileSize, null);
+                
+                //if(x == 20 && y == 10) g2.drawImage(Assets.CASTLE_GATE, screenX, screenY, tileSize, tileSize, null);
             }
         }
     }

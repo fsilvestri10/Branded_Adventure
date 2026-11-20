@@ -12,6 +12,7 @@ public abstract class Character extends WorldObject {
     private ArrayList<Item> equipment;
     private ArrayList<Skill> skills;
     private int status;
+    private int statusTimer;
     protected Direction direction;
     protected boolean moving = false;
 
@@ -25,6 +26,7 @@ public abstract class Character extends WorldObject {
         this.equipment = new ArrayList<>();
         this.skills = new ArrayList<>();
         this.status = 0;
+        this.statusTimer = 0;
         this.equipment.add(0, ItemDatabase.getSword());
         this.equipment.add(1, ItemDatabase.getArmor());
         this.direction = direction;
@@ -33,13 +35,14 @@ public abstract class Character extends WorldObject {
     public void attack(Character target) {
         // l'armatura del bersaglio è considerata dentro takeDamage()
     	
-    	if(this.getEquipmentSize() == 0) target.takeDamage(this.getStrength());
-    	else target.takeDamage(this.getStrength() + this.getEquipment(0).getValue());
+    	int damage = this.getStrength();
+    	if(status == 1) damage *=1.5;
+    	if(this.getEquipmentSize() == 0) target.takeDamage(damage);
+    	else target.takeDamage(damage + this.getEquipment(0).getValue());
+    	this.statusTimer--;
+    	if(this.statusTimer == 0) this.status = 0;
     }
-    /**
-     * Subisce un attacco: l'armatura riduce il danno. Gli HP non scendono sotto zero.
-     * (Con la stessa formula di prima: HP - (attacco - armatura), ma l'armatura non può mai curare.)
-     */
+    
     public void takeDamage(int rawDamage) {
         int damage = 0;
         if(this.getEquipmentSize() == 2) damage = Math.max(0, rawDamage - this.getEquipment(1).getValue());
@@ -49,7 +52,7 @@ public abstract class Character extends WorldObject {
         this.currentHP = Math.max(0, this.currentHP - damage);
     }
 
-    /** Recupera HP, senza superare il massimo. */
+    // Recupera HP, senza superare il massimo.
     public void heal(int amount) {
         this.currentHP = Math.min(this.totalHP, this.currentHP + amount);
     }
@@ -57,10 +60,24 @@ public abstract class Character extends WorldObject {
         target.currentHP = Math.max(0, target.currentHP - amount);
     }
     public void buff() {
-    	this.status++;
+    	if(++this.status > 1) {
+    		this.status--;    	
+    	} else {
+    		this.statusTimer = SkillDatabase.getBuff().getPower();
+    	}
     }
-    public void debuff(Character target) {
-    	target.status--;
+    public void debuff() {
+    	if(--this.status < -1) {
+    		this.status++;
+    	} else {
+        	this.statusTimer = SkillDatabase.getDebuff().getPower();
+    	}
+    }
+    public int getStatusTimer() {
+    	return this.statusTimer;
+    }
+    public int getStatus() {
+    	return this.status;
     }
 
     public boolean isDead() {

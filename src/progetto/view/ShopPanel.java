@@ -66,7 +66,8 @@ public class ShopPanel extends JPanel {
 				x = 200;
 				y = 420;
 			}
-			g2.drawImage(Assets.itemImage(items.get(i)), x, y, 80, 80, null);			g2.drawImage(Assets.ITEM_FRAME, x - 35, y - 45, 150, 160, null);
+			g2.drawImage(Assets.itemImage(items.get(i)), x, y, 80, 80, null);
+			g2.drawImage(Assets.ITEM_FRAME, x - 35, y - 45, 150, 160, null);
 			g2.drawImage(Assets.ANCIENT_SCROLL, x - 20, y + 100, 120, 60, null);
 			g2.drawImage(Assets.GOLD, x, y + 120, 25, 25, null);
 			g2.drawString(String.valueOf(items.get(i).getCost()), x + 30, y + 140);

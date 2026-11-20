@@ -38,12 +38,33 @@ public class Enemy extends Character {
             	this.setSkill(SkillDatabase.getSlash());
                 break;
             case 2:
+            	this.setSkill(SkillDatabase.getBuff());
                 break;
             case 3:
+            	this.setSkill(SkillDatabase.getDebuff());
                 break;
         }
     }
     
+    // metodi nel fight
+    public void useSkill(Character target) {
+    	switch(this.getId()) {
+    		case 0:
+    			this.heal(SkillDatabase.getHeal().getPower());
+    			break;
+    		case 1:
+    			target.takeDamage(SkillDatabase.getSlash().getPower());
+    			break;
+    		case 2:
+    			this.buff();
+    			break;
+    		case 3:
+    			target.debuff();
+    			break;
+    	}
+    }
+    
+    // metodi nella mappa
     public boolean move(int dx, int dy, GameWorld world, Player player) {
     	boolean moved = false;
     	
@@ -76,20 +97,6 @@ public class Enemy extends Character {
         return !world.isBlocked(next, this) && !next.intersects(player.getHitbox());    
     }
 
-    public void useSkill(Character target) {
-    	switch(this.getId()) {
-    		case 0:
-    			this.heal(SkillDatabase.getHeal().getPower());
-    			break;
-    		case 1:
-    			target.takeDamage(SkillDatabase.getSlash().getPower());
-    			break;
-    		case 2:
-    			break;
-    		case 3:
-    			break;
-    	}
-    }
     public void update(GameWorld world, Player player) {
     	// se il player è vicino il nemico si ferma
         if (this.interactRange.intersects(player.getHitbox())) {

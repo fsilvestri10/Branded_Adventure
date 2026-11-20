@@ -53,6 +53,12 @@ public class Player extends Character {
             case DAMAGE:
                 this.slash(skill.getPower(), enemy);
                 break;
+            case BUFF:
+            	this.buff();
+            	break;
+            case DEBUFF:
+            	enemy.debuff();
+            	break;
             default:
                 break;
         }

@@ -25,10 +25,7 @@ public class Shop extends WorldObject{
 	    Item item = items.get(index);
 	    int slot = item.getEquipmentSlot();
 	    
-	    if (item == player.getEquipment(slot) ||
-	        player.getGold() < item.getCost()) {
-	        return false;
-	    }
+	    if (item == player.getEquipment(slot) || player.getGold() < item.getCost()) return false;
 	    player.changeEquipment(slot, item);
 	    player.giveGold(-item.getCost());
 
