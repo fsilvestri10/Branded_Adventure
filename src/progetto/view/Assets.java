@@ -48,6 +48,13 @@ public final class Assets {
     public static final BufferedImage CASTLE;
     public static final BufferedImage PATH_TILE;
     public static final BufferedImage CASTLE_GATE;
+    public static final BufferedImage CASTLE_GATE_SHADOW;
+    public static final BufferedImage CASTLE_WALL;
+    public static final BufferedImage CASTLE_HEAD;
+    public static final BufferedImage CASTLE_ROOF;
+    public static final BufferedImage CASTLE_COLUMN;
+    public static final BufferedImage CASTLE_LEFT_WALL;
+    public static final BufferedImage CASTLE_RIGHT_WALL;
     public static final BufferedImage COOLDOWN_ICON;
     public static final BufferedImage FENCE;
     public static final BufferedImage SHOP_BACKGROUND;
@@ -63,6 +70,8 @@ public final class Assets {
     public static final BufferedImage BLACK_CLEAVER;
     public static final BufferedImage GARGOYLE_STONEPLATE;
     public static final BufferedImage INFINITY_EDGE;
+    public static final BufferedImage BUFF;
+    public static final BufferedImage DEBUFF;
     
     // FONT
     public static final Font PIXEL_FONT;
@@ -118,8 +127,18 @@ public final class Assets {
             CASTLE = load("/Castle2.png");
             PATH_TILE = CASTLE.getSubimage(200, 328, 50, 50);
             CASTLE_GATE = CASTLE.getSubimage(315, 0, 100, 90);
+            CASTLE_GATE_SHADOW = CASTLE.getSubimage(430, 224, 68, 66);
+            CASTLE_WALL = CASTLE.getSubimage(210, 128, 46, 90);
+            CASTLE_COLUMN = CASTLE.getSubimage(352, 320, 32, 96);
+            CASTLE_LEFT_WALL = CASTLE.getSubimage(200, 128, 56, 90);
+            CASTLE_RIGHT_WALL = CASTLE.getSubimage(223, 128, 23, 90);
+            CASTLE_HEAD = CASTLE.getSubimage(199, 29, 16, 19);
+            CASTLE_ROOF = CASTLE.getSubimage(92, 78, 41, 17);
+
 
             COOLDOWN_ICON = load("/Cooldown.png");
+            BUFF = load("/Buff.png");
+            DEBUFF = load("/Debuff.png");
             FENCE = load("/Fence.png");
 
             SHOP_BACKGROUND = load("/Shop_background.png");

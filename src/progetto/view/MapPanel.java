@@ -13,6 +13,7 @@ import java.util.WeakHashMap;
 import javax.swing.JPanel;
 
 import progetto.model.Bush;
+import progetto.model.CastleGate;
 import progetto.model.Enemy;
 import progetto.model.Fence;
 import progetto.model.GameWorld;
@@ -107,7 +108,13 @@ public class MapPanel extends JPanel {
         int screenY = o.getY() - this.player.getY() + cy;
         
         if (o instanceof Wall) {
-            g2.drawImage(Assets.WALL, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
+        	if (o.getX() == 0 || o.getX() == 50 * 49)
+        		g2.drawImage(Assets.CASTLE_HEAD, screenX, screenY, o.getWidth(), o.getHeight(), null);
+        	else if (o.getY() == 50 * 49)
+        		g2.drawImage(Assets.CASTLE_ROOF, screenX, screenY, o.getWidth() + 40, o.getHeight(), null);
+        	else
+        		g2.drawImage(Assets.CASTLE_WALL, screenX, screenY - 56, o.getWidth(), o.getHeight() + 62, null);
+    		
         } else if (o instanceof Tree) {
             g2.drawImage(Assets.TREE, screenX - 20, screenY - 20, o.getWidth() + 40, o.getHeight() + 40, null);
         } else if (o instanceof Fence) {
@@ -119,6 +126,13 @@ public class MapPanel extends JPanel {
             drawEnemy(g2, (Enemy) o, screenX, screenY);
         } else if(o instanceof Shop) {
         	g2.drawImage(Assets.SHOP, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
+        } else if(o instanceof CastleGate) {
+        	/*for (int i = 1; i < 22; i++) {
+        		g2.drawImage(Assets.CASTLE_WALL, screenX + i*60, screenY - 6, o.getWidth() - 40, o.getHeight() + 12, null);
+        		g2.drawImage(Assets.CASTLE_WALL, screenX - i*60, screenY - 6, o.getWidth() - 40, o.getHeight() + 12, null);
+        	}*/
+        	g2.drawImage(Assets.CASTLE_GATE_SHADOW, screenX, screenY - 6, o.getWidth(), o.getHeight() + 12, null);
+        	g2.drawImage(Assets.CASTLE_GATE, screenX - 6, screenY - 6, o.getWidth() + 6, o.getHeight() + 12, null);
         }
     }
 

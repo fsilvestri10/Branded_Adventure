@@ -42,7 +42,7 @@ public class GameWorld extends Map {
     protected void generateMap() {
         for (int i = 0; i < COLUMNS; i++) {
             for (int j = 0; j < ROWS; j++) {
-                if (j == 49 || j == 9 || (j < 9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) || (i == 0 || i == 49) && j > 9) {
+                if (j == 49 || j == 9 || /*(j < 9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) ||*/ (i == 0 || i == 49) && j > 7) {
                 	// muri
                     map[i][j] = 1;
                     this.objectHitbox.add(new Wall(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize));
@@ -69,6 +69,7 @@ public class GameWorld extends Map {
         this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 45 * this.tileSize, this.tileSize, this.tileSize));
         
         this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize * 3, this.tileSize * 4, this.player));
+        this.putObject(7, new CastleGate(24 * this.tileSize, 8 * this.tileSize, this.tileSize * 2, this.tileSize * 2));
         
         for (int i = 0; i < 10; i++)
             if (!this.putObject(2, new Tree(this.rnd.nextInt(2, 48) * this.tileSize, this.rnd.nextInt(11, 48) * this.tileSize, this.tileSize, this.tileSize))) i--;

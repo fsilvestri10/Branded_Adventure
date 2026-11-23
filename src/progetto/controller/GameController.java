@@ -24,8 +24,8 @@ import progetto.view.ShopPanel;
 public class GameController {
 
     /** Casella di partenza del giocatore (si moltiplica per la dimensione delle caselle). */
-    public static final int SPAWN_TILE_X = 25;
-    public static final int SPAWN_TILE_Y = 30;
+    public static final int SPAWN_TILE_X = 24;
+    public static final int SPAWN_TILE_Y = 29;
 
     private static final int TICK_MS = 16; // ciclo di gioco a ~60 FPS
 

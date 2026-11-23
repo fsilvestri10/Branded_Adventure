@@ -128,13 +128,13 @@ public class FightPanel extends JPanel {
         BufferedImage status;
         switch(this.player.getStatus()) {
         	case -1:
-        		status = Assets.BLACK_CLEAVER;
+        		status = Assets.DEBUFF;
         		break;
         	case 0:
         		status = Assets.ARMOR;
         		break;
         	case 1:
-        		status = Assets.CHAINMAIL;
+        		status = Assets.BUFF;
         		break;
         	default:
         		status = null;
@@ -145,26 +145,43 @@ public class FightPanel extends JPanel {
 
     private void drawEnemyBattle(Graphics2D g2, int w, int h) {
         switch(enemy.getId()) {
-    	case 0:
-    		g2.drawImage(Assets.BOSS1_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
-    		break;
-    	case 1:
-    		g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 4, h / 4, w / 2, h / 2, null);
-    		break;
-    	case 2:
-    		g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
-    		break;
-    	case 3:
-    		g2.drawImage(Assets.BOSS1_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
-    		break;
-    	default:
-    		g2.drawImage(Assets.ENEMY_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
-    		break;
+            case 0:
+                g2.drawImage(Assets.BOSS1_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
+                break;
+            case 1:
+                g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 4, h / 4, w / 2, h / 2, null);
+                break;
+            case 2:
+                g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
+                break;
+            case 3:
+                g2.drawImage(Assets.BOSS1_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
+                break;
+            default:
+                g2.drawImage(Assets.ENEMY_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
+                break;
         }
 
         g2.setColor(Color.GREEN);
         double percentHP = (double) this.enemy.getCurrentHP() / this.enemy.getTotalHP();
         g2.fillRect(w / 2 - w / 6, h / 5, (int) (w / 3 * percentHP), h / 10 - 30);
+
+        BufferedImage status;
+        switch(this.enemy.getStatus()) {
+        	case -1:
+        		status = Assets.DEBUFF;
+        		break;
+        	case 0:
+        		status = Assets.ARMOR;
+        		break;
+        	case 1:
+        		status = Assets.BUFF;
+        		break;
+        	default:
+        		status = null;
+        		break;
+        }
+        g2.drawImage(status, w / 2 - w / 6, h / 5, (int) (w / 3 * percentHP), h / 10 - 30, null);
     }
 
     private void drawCombatMessage(Graphics g2, int w, int h) {
