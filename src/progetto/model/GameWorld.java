@@ -11,8 +11,11 @@ public class GameWorld extends Map {
 
     private Random rnd = new Random();
     private int enemyId = 4;
-    
+    // nemici massimi per zona
     private int enemyCountZone[]  = new int[4];
+    
+    private CastleGate gate = new CastleGate(24 * this.tileSize, 8 * this.tileSize, this.tileSize * 2, this.tileSize * 2);
+    private int aliveBosses = 4;
 
     public GameWorld(int tileSize, Player player ) {
     	super(tileSize, player, COLUMNS, ROWS);
@@ -30,7 +33,7 @@ public class GameWorld extends Map {
         for (int i = 0; i < 4; i++) this.checkEnemy(i);
     }
 
-    /** Riporta il mondo allo stato iniziale (usato dopo un game over). */
+    // Riporta il mondo allo stato iniziale (usato dopo un game over)
     public void reset() {
         this.objectHitbox.clear();
         for(int i = 0; i < 4; i++) this.enemyCountZone[i] = 0;
@@ -38,11 +41,11 @@ public class GameWorld extends Map {
         this.generateMap();
     }
 
-    // genero la mappa con i muri
+    // genero la mappa
     protected void generateMap() {
         for (int i = 0; i < COLUMNS; i++) {
             for (int j = 0; j < ROWS; j++) {
-                if (j == 49 || j == 9 || /*(j < 9 && (i == 20 || i == 29)) || j == 0 && (i < 29 && i > 20) ||*/ (i == 0 || i == 49) && j > 7) {
+                if (j == 49 || j == 9 || (i == 0 || i == 49) && j > 7) {
                 	// muri
                     map[i][j] = 1;
                     this.objectHitbox.add(new Wall(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize));
@@ -62,20 +65,20 @@ public class GameWorld extends Map {
             }
         }
 
-        // posiziono nemici, alberi e cespugli
+        // posiziono nemici, shop, gate,  alberi, cespugli
         this.putObject(5, new Enemy(0, "Skeleton Boss", 100, 5, 2 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(1, "Knight Boss", 100, 5, 45 * this.tileSize, 13 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(2, "Skeleton Boss", 100, 5, 45 * this.tileSize, 45 * this.tileSize, this.tileSize, this.tileSize));
         this.putObject(5, new Enemy(3, "Skeleton Boss", 100, 5, 2 * this.tileSize, 45 * this.tileSize, this.tileSize, this.tileSize));
         
         this.putObject(6, new Shop(20 * this.tileSize, 20 * this.tileSize, this.tileSize * 3, this.tileSize * 4, this.player));
-        this.putObject(7, new CastleGate(24 * this.tileSize, 8 * this.tileSize, this.tileSize * 2, this.tileSize * 2));
+        this.putObject(7, this.gate);
         
         for (int i = 0; i < 10; i++)
             if (!this.putObject(2, new Tree(this.rnd.nextInt(2, 48) * this.tileSize, this.rnd.nextInt(11, 48) * this.tileSize, this.tileSize, this.tileSize))) i--;
         for (int i = 0; i < 30; i++)
             if (!this.putObject(4, new Bush(this.rnd.nextInt(2, 48) * this.tileSize + 10, this.rnd.nextInt(11, 48) * this.tileSize + 10, this.tileSize - 20, this.tileSize - 20))) i--;
-        
+        // controllo se ci sono abbastanza nemici
         for(int i = 0; i < 4; i++) this.checkEnemy(i);
     }
     
@@ -101,7 +104,7 @@ public class GameWorld extends Map {
     	}
     }
 
-    /** Calpesta i cespugli che si trovano nel rettangolo. */
+    // Calpesta i cespugli che si trovano nel rettangolo
     public void trampleBushes(Box area) {
         for (WorldObject object : this.objectHitbox) {
             if (object instanceof Bush && area.intersects(object.getHitbox())) ((Bush) object).trample();
@@ -111,7 +114,12 @@ public class GameWorld extends Map {
     public void removeEnemy(Enemy enemy) {
         this.objectHitbox.remove(enemy);
         // i boss non vengono contati tra i nemici da rimpiazzare
-        if (!enemy.isBoss()) removeEnemyCount(enemy);
+        if (!enemy.isBoss()) {
+        	removeEnemyCount(enemy);
+        } else {
+        	this.aliveBosses--;
+        	if(this.aliveBosses == 0) this.gate.openGate();
+        }
     }
     
     private void removeEnemyCount(Enemy enemy) {
@@ -122,12 +130,15 @@ public class GameWorld extends Map {
         else if(spawn.intersects(new Box(1500, 1500, 1000, 1000))) this.enemyCountZone[3]--;
     }
 
-    /** True se la casella (x, y) è coperta d'erba (cioè non è un muro). */
+    // True se la casella (x, y) è coperta d'erba
     public boolean isGrassTile(int x, int y) {
         return this.map[x][y] != 1;
     }
-    
+ // True se la casella (x, y) è path
     public boolean isPathTile(int x, int y) {
         return this.map[x][y] == 7;
+    }
+    public CastleGate getGate() {
+    	return this.gate;
     }
 }

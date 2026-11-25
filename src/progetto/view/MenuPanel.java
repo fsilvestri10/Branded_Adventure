@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/** VIEW: schermata di game over. Non decide cosa succede ai click: avvisa il controller. */
+// schermata di menu
 public class MenuPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;

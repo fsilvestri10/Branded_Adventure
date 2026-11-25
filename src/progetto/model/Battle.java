@@ -28,7 +28,7 @@ public class Battle {
         this.enemy = enemy;
     }
 
-    /** Il giocatore sceglie di attaccare. False se non è il suo turno. */
+    // Il giocatore sceglie di attaccare. False se non è il suo turno. 
     public boolean playerAttack() {
         if (this.state != State.PLAYER_TURN) return false;
         this.state = State.PLAYER_ACTING;
@@ -37,7 +37,7 @@ public class Battle {
         return true;
     }
 
-    /** Il giocatore sceglie di usare un'abilità. False se non è il suo turno o l'abilità non esiste. */
+    // Il giocatore sceglie di usare un'abilità. False se non è il suo turno o l'abilità non esiste.
     public boolean playerSkill(int index) {
         if (this.state != State.PLAYER_TURN) return false;
         if (index < 0 || index >= this.player.getSkills().size()) return false;
@@ -49,7 +49,7 @@ public class Battle {
         return true;
     }
 
-    /** Applica l'azione scelta dal giocatore. Se il nemico è ancora vivo, tocca a lui. */
+    // Applica l'azione scelta dal giocatore. Se il nemico è ancora vivo, tocca a lui
     public void resolvePlayerAction() {
         if (this.state != State.PLAYER_ACTING) return;
         if (this.pendingSkill < 0) this.player.attack(this.enemy);
@@ -67,13 +67,13 @@ public class Battle {
         this.state = State.ENEMY_TURN;
     }
 
-    /** Il nemico attacca. Se il giocatore è ancora vivo torna il suo turno. */
+    // Il nemico attacca. Se il giocatore è ancora vivo torna il suo turno
     public void resolveEnemyAction() {
         if (this.state != State.ENEMY_TURN) return;
-        
+        // se non è un boss attacca normalmente
         if(this.enemy.getId() > 3) {
         	this.enemy.attack(this.player);
-        }
+        } // altrimenti puo usare una skill
         else {
         	if(this.rnd.nextInt(0,11) < 4) this.enemy.useSkill(player);
         	else this.enemy.attack(player);
@@ -87,7 +87,7 @@ public class Battle {
         this.state = State.PLAYER_TURN;
     }
 
-    /** Ricompense per la vittoria (da chiamare una volta sola, quando lo stato è WON). */
+    // Ricompense per la vittoria, chiamata quando lo stato è WON
     public void applyRewards() {
         if (this.enemy.isBoss() && !this.enemy.getSkills().isEmpty()) {
             // se il nemico sconfitto è un boss, il giocatore riceve la relativa skill

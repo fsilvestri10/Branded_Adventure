@@ -5,11 +5,13 @@ import java.util.Random;
 import javax.swing.Timer;
 
 import progetto.model.Battle;
+import progetto.model.CastleGate;
 import progetto.model.Enemy;
 import progetto.model.GameWorld;
 import progetto.model.Player;
 import progetto.model.Shop;
 import progetto.view.AudioPlayer;
+import progetto.view.CastlePanel;
 import progetto.view.FightPanel;
 import progetto.view.GameFrame;
 import progetto.view.GameOverPanel;
@@ -87,9 +89,15 @@ public class GameController {
         } else if(this.keys.ePressed && near instanceof Shop) {
         	this.keys.ePressed = false;
             openShop((Shop)near);
+        } else if(this.keys.ePressed && near instanceof CastleGate && ((CastleGate)near).isOpen()) {
+        	this.keys.ePressed = false;
+        	enterCastle((CastleGate)near);
         }
         
-        
+    }
+    private void enterCastle(CastleGate gate) {
+    	this.onMap = false;
+    	//CastlePanel castlePanel = new CastlePanel(this.keys, );
     }
 
     private void openShop(Shop shop) {

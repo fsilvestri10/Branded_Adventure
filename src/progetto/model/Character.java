@@ -2,7 +2,7 @@ package progetto.model;
 
 import java.util.ArrayList;
 
-/** MODEL: dati e regole comuni a giocatore e nemici. Nessuna immagine, nessun disegno. */
+// MODEL: dati e regole comuni a giocatore e nemici
 public abstract class Character extends WorldObject {
     private String name;
     private int level;
@@ -12,7 +12,7 @@ public abstract class Character extends WorldObject {
     private ArrayList<Item> equipment;
     private ArrayList<Skill> skills;
     private int status;
-    private int statusTimer;
+    private int statusTimer; // per far scadere la durata dello stato
     protected Direction direction;
     protected boolean moving = false;
 
@@ -34,6 +34,7 @@ public abstract class Character extends WorldObject {
     
     public void attack(Character target) {
         // l'armatura del bersaglio è considerata dentro takeDamage()
+    	// qua considero eventuali buff e l'equipment che aumenta l'attacco
     	
     	int damage = this.getStrength();
     	if(status == 1) damage *=1.5;
@@ -44,10 +45,11 @@ public abstract class Character extends WorldObject {
     }
     
     public void takeDamage(int rawDamage) {
+    	// qua considero eventuali debuff e l'equipment che aumenta la difesa
+    	
         int damage = 0;
         if(this.getEquipmentSize() == 2) damage = Math.max(0, rawDamage - this.getEquipment(1).getValue());
         else damage = Math.max(0, rawDamage);
-        //applico l'eventuale debuff
         if(this.status == -1) damage*=1.5;
         this.currentHP = Math.max(0, this.currentHP - damage);
     }
@@ -56,9 +58,11 @@ public abstract class Character extends WorldObject {
     public void heal(int amount) {
         this.currentHP = Math.min(this.totalHP, this.currentHP + amount);
     }
+    // Fa danni, senza scendere sotto 0 hp
     public void slash(int amount, Character target) {
         target.currentHP = Math.max(0, target.currentHP - amount);
     }
+    // mi potenzio se non lo sono gia
     public void buff() {
     	if(++this.status > 1) {
     		this.status--;    	
@@ -66,6 +70,7 @@ public abstract class Character extends WorldObject {
     		this.statusTimer = SkillDatabase.getBuff().getPower();
     	}
     }
+    // vengo depotenziato se non lo sono gia
     public void debuff() {
     	if(--this.status < -1) {
     		this.status++;

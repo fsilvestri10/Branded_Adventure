@@ -1,9 +1,5 @@
 package progetto.model;
 
-/**
- * MODEL: il giocatore.
- * Contiene solo stato e regole di gioco: nessuna grafica, nessun input, nessuna schermata.
- */
 public class Player extends Character {
 
     // velocità in pixel per ogni aggiornamento (il controller la usa per calcolare dx e dy)
@@ -17,11 +13,7 @@ public class Player extends Character {
         
     }
 
-    /**
-     * Sposta il giocatore di (dx, dy) se non ci sono ostacoli.
-     * Gli assi sono controllati separatamente, così si può "strisciare" lungo i muri.
-     * Non legge la tastiera: dx e dy li decide il controller.
-     */
+    //Sposta il giocatore di (dx, dy) se non ci sono ostacoli.
     public void move(int dx, int dy, GameWorld world) {
         this.moving = (dx != 0 || dy != 0);
 
@@ -42,7 +34,7 @@ public class Player extends Character {
         if (!world.isBlocked(nextY, this)) this.tileWorldY += dy;
     }
     
-    /** Usa l'abilità in posizione index (per ora esiste solo la cura). */
+    // Usa l'abilità in posizione index
     public void useSkill(int index, Enemy enemy) {
         //if (index < 0 || index >= this.getSkills().size()) return;
         Skill skill = this.getSkills().get(index);
@@ -86,7 +78,7 @@ public class Player extends Character {
         return this.getLevel() * 20;
     }
 
-    /** Dopo un game over: il giocatore riparte da (x, y) con la vita al massimo. */
+    // Dopo un game over il giocatore riparte da (x, y) con la vita al massimo
     public void respawn(int x, int y) {
         this.tileWorldX = x;
         this.tileWorldY = y;

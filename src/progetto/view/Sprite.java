@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import progetto.model.Direction;
 
-/** VIEW: animazione di camminata del giocatore (ritaglia i frame dallo sprite sheet). */
+// animazione di camminata
 public class Sprite {
     private BufferedImage[] walkUp;
     private BufferedImage[] walkDown;
@@ -44,7 +44,7 @@ public class Sprite {
         }
     }
 
-    /** Fa avanzare l'animazione se il giocatore cammina, altrimenti mostra il frame fermo. */
+    // Fa avanzare l'animazione se il giocatore cammina, altrimenti mostra il frame fermo
     public void update(boolean moving) {
         if (moving) {
             this.spriteCounter++;

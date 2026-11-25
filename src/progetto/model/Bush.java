@@ -1,9 +1,5 @@
 package progetto.model;
 
-/**
- * MODEL: cespuglio. Non blocca il passaggio, ma si può calpestare.
- * Il model tiene solo lo stato (calpestato sì/no): quale immagine mostrare lo decide la view.
- */
 public class Bush extends WorldObject {
     private boolean trampled = false;
 

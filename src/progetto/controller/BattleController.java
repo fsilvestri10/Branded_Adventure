@@ -33,6 +33,7 @@ public class BattleController {
 
     private void playerActs() {
         this.battle.resolvePlayerAction();
+        // se ho vinto finisce la battaglia e lo comunico alla view
         if (this.battle.getState() == Battle.State.WON) {
             this.battle.applyRewards();
             this.onWon.run();
@@ -41,7 +42,7 @@ public class BattleController {
             schedule(this::enemyActs);
         }
     }
-
+    // se è il turno del nemico agisce e se perdo lo comunico alla view
     private void enemyActs() {
         this.battle.resolveEnemyAction();
         if (this.battle.getState() == Battle.State.LOST) this.onLost.run();

@@ -2,6 +2,7 @@ package progetto.model;
 
 import java.util.ArrayList;
 
+// classe astratta in comune per la mappa del mondo e il castello
 public abstract class Map {
 
 	protected int tileSize;
@@ -31,7 +32,7 @@ public abstract class Map {
             return false;
         }
     }
-    /** True se nel rettangolo c'è un ostacolo (nemico, albero o muro). */
+    // True se nel rettangolo c'è un ostacolo
     public boolean isBlocked(Box area, Character self) {
         for (WorldObject object : this.objectHitbox) {
             if (object == self) continue;
@@ -40,7 +41,7 @@ public abstract class Map {
         return false;
     }
 
-    /** Il nemico a portata di combattimento rispetto al giocatore, oppure null. */
+    // ritorna il nemico a portata di combattimento rispetto al giocatore, oppure null
     public Object findEnemyInRange(Player player) {
         Object found = null;
         for (WorldObject object : this.objectHitbox) {

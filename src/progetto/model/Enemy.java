@@ -2,7 +2,6 @@ package progetto.model;
 
 import java.util.Random;
 
-/** MODEL: nemico (normale o boss). Nessuna immagine: la view sceglie lo sprite con isBoss(). */
 public class Enemy extends Character {
 
     private int expDrop;
@@ -92,6 +91,7 @@ public class Enemy extends Character {
         this.interactRange = new Box(this.tileWorldX - 10, this.tileWorldY - 10, this.width + 20, this.height + 20);
         return moved;
     }
+    // metodo per controllare se il nemico puo spostarsi in una certa direzione
     private boolean canGo(Box next, GameWorld world, Player player) {
     	if (Math.abs(next.getX() - this.spawnX) > WANDER_RANGE || Math.abs(next.getY() - this.spawnY) > WANDER_RANGE) return false;
         return !world.isBlocked(next, this) && !next.intersects(player.getHitbox());    
@@ -122,7 +122,7 @@ public class Enemy extends Character {
         this.waitTicks = RND.nextInt(60, 180);
     }
     
-    /** I boss hanno id da 0 a 3, i nemici normali partono da 4. */
+    // I boss hanno id da 0 a 3, i nemici normali partono da 4
     public boolean isBoss() {
         return this.id < 4;
     }

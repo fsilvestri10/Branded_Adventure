@@ -2,6 +2,7 @@ package progetto.controller;
 
 import java.awt.EventQueue;
 
+import progetto.model.Castle;
 import progetto.model.GameWorld;
 import progetto.model.Player;
 import progetto.view.GameFrame;
@@ -19,6 +20,7 @@ public class Main {
                 
                 Player player = new Player("ez", 1000000, 1, GameController.SPAWN_TILE_X * tileSize, GameController.SPAWN_TILE_Y * tileSize, tileSize, tileSize);
                 GameWorld world = new GameWorld(tileSize, player);
+                //Castle castle = new Castle(tileSize, );
                 // VIEW e input
                 KeyHandler keys = new KeyHandler();
                 GameFrame frame = new GameFrame();

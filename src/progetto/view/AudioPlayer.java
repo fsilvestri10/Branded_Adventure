@@ -7,12 +7,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
-/** VIEW: riproduzione della musica (è output verso l'utente, come la grafica). */
+// riproduzione della musica
 public class AudioPlayer {
 
     private Clip clip;
 
-    /** Fa partire la traccia /nome.wav presa dalla cartella resources. */
+    // Fa partire la traccia presa dalla cartella resources
     public void play(String track) {
         this.stop();
         try {

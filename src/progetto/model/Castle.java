@@ -2,6 +2,7 @@ package progetto.model;
 
 import java.util.ArrayList;
 
+// modello del castello dove si trova il boss finale
 public class Castle extends Map{
 	private static final int COLUMNS = 10;
     private static final int ROWS = 10;

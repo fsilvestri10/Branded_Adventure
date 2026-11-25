@@ -18,10 +18,8 @@ import progetto.model.Item;
 public class ShopPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	//private JButton buyItem1 = new JButton();
-    //private JButton buyItem2 = new JButton();
-    private ArrayList<JButton> buyButtons = new ArrayList<>();
-    private JButton exit = new JButton();
+    private ArrayList<JButton> buyButtons = new ArrayList<>(); // pulsanti per comprare oggetti
+    private JButton exit = new JButton(); // pulsante per uscire dallo shop
     private JLabel noGold = new JLabel("Non hai abbastanza oro per comprare questo oggetto");
 	private IntConsumer onBuy;
 	private Runnable onExit;
@@ -83,7 +81,7 @@ public class ShopPanel extends JPanel {
 	    g2.drawImage(Assets.GOLD, 50, 90, 35, 35, null);
 	    g2.drawString(String.valueOf(playerGold), 85, 120);
 	}
-	
+	// mostra la scritta se non si ha abbastanza oro per comprare l'oggetto cliccato
 	public void drawNoGoldLabel() {
         this.noGold.setBounds(230, 630, 1000, 100);
         this.noGold.setBackground(new Color(0, 0, 0, 128));

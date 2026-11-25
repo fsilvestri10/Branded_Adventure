@@ -13,13 +13,8 @@ import javax.imageio.ImageIO;
 
 import progetto.model.Item;
 
-/**
- * VIEW: tutte le risorse grafiche del gioco,
- * caricate una volta sola.
- *
- * Il model non sa che esistono: è la view a scegliere
- * quale risorsa utilizzare per ogni oggetto.
- */
+//tutte le risorse grafiche del gioco
+
 public final class Assets {
 
     // IMMAGINI
@@ -37,6 +32,10 @@ public final class Assets {
     public static final BufferedImage BOSS1_FIGHT;
     public static final BufferedImage BOSS2;
     public static final BufferedImage BOSS2_FIGHT;
+    public static final BufferedImage BOSS3;
+    public static final BufferedImage BOSS3_FIGHT;
+    public static final BufferedImage BOSS4;
+    public static final BufferedImage BOSS4_FIGHT;
     public static final BufferedImage PLAYER_SHEET;
     public static final BufferedImage PLAYER_COMBAT;
     public static final BufferedImage ANCIENT_SCROLL;
@@ -48,6 +47,7 @@ public final class Assets {
     public static final BufferedImage CASTLE;
     public static final BufferedImage PATH_TILE;
     public static final BufferedImage CASTLE_GATE;
+    public static final BufferedImage CASTLE_OPENED_GATE;
     public static final BufferedImage CASTLE_GATE_SHADOW;
     public static final BufferedImage CASTLE_WALL;
     public static final BufferedImage CASTLE_HEAD;
@@ -103,6 +103,12 @@ public final class Assets {
 
             BOSS2 = load("/Boss2.png");
             BOSS2_FIGHT = load("/Boss2Fight.png");
+            
+            BOSS3 = load("/Boss3.png");
+            BOSS3_FIGHT = load("/Boss3Fight.png");
+            
+            BOSS4 = load("/Boss4.png");
+            BOSS4_FIGHT = load("/Boss4Fight.png");
 
             PLAYER_SHEET = load("/Player.png");
             PLAYER_COMBAT = PLAYER_SHEET.getSubimage(96, 0, 96, 96);
@@ -127,6 +133,7 @@ public final class Assets {
             CASTLE = load("/Castle2.png");
             PATH_TILE = CASTLE.getSubimage(200, 328, 50, 50);
             CASTLE_GATE = CASTLE.getSubimage(315, 0, 100, 90);
+            CASTLE_OPENED_GATE = CASTLE.getSubimage(416, 96, 96, 90);
             CASTLE_GATE_SHADOW = CASTLE.getSubimage(430, 224, 68, 66);
             CASTLE_WALL = CASTLE.getSubimage(210, 128, 46, 90);
             CASTLE_COLUMN = CASTLE.getSubimage(352, 320, 32, 96);

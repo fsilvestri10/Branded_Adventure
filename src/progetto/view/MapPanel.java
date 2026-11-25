@@ -23,10 +23,7 @@ import progetto.model.Tree;
 import progetto.model.Wall;
 import progetto.model.WorldObject;
 
-/**
- * VIEW: la mappa. Legge il model (mondo e giocatore) e lo disegna, senza mai modificarlo.
- * Non conosce il controller: riceve solo un KeyListener generico per l'input.
- */
+// la mappa. Legge il model e lo disegna
 public class MapPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +43,7 @@ public class MapPanel extends JPanel {
         this.player = player;
     }
 
-    /** Mostra o nasconde la scritta "E per combattere". */
+    // Mostra o nasconde la scritta "E per combattere"
     public void setFightHint(boolean fightHint) {
         this.fightHint = fightHint;
     }
@@ -68,7 +65,8 @@ public class MapPanel extends JPanel {
         	cx = getWidth() - (2500 - this.player.getX());
         if (this.player.getY() > 2125)
         	cy = getHeight() - (2500 - this.player.getY());
-        
+        else if(this.player.getY() < 775)
+        	cy = getHeight() - (1170 - this.player.getY());
         // disegno il mondo
         drawTiles(g2, cx, cy);
         
@@ -91,7 +89,7 @@ public class MapPanel extends JPanel {
                 int screenY = y * tileSize - this.player.getY() + cy;
 
                 // salto le caselle fuori dallo schermo
-                if (screenX + tileSize < 0 || screenX > getWidth() || screenY + tileSize < 0 || screenY > getHeight()) continue;
+                if (screenX + tileSize < 0 || screenX > getWidth() || screenY + tileSize < 0 || screenY > getHeight());
 
                 // posiziono l'erba nella mappa
                 if (this.world.isGrassTile(x, y)) g2.drawImage(Assets.GRASS_TILE, screenX, screenY, tileSize, tileSize, null);
@@ -107,6 +105,7 @@ public class MapPanel extends JPanel {
         int screenX = o.getX() - this.player.getX() + cx;
         int screenY = o.getY() - this.player.getY() + cy;
         
+        // disegno gli oggetti nella mappa
         if (o instanceof Wall) {
         	if (o.getX() == 0 || o.getX() == 50 * 49)
         		g2.drawImage(Assets.CASTLE_HEAD, screenX, screenY, o.getWidth(), o.getHeight(), null);
@@ -127,27 +126,26 @@ public class MapPanel extends JPanel {
         } else if(o instanceof Shop) {
         	g2.drawImage(Assets.SHOP, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
         } else if(o instanceof CastleGate) {
-        	/*for (int i = 1; i < 22; i++) {
-        		g2.drawImage(Assets.CASTLE_WALL, screenX + i*60, screenY - 6, o.getWidth() - 40, o.getHeight() + 12, null);
-        		g2.drawImage(Assets.CASTLE_WALL, screenX - i*60, screenY - 6, o.getWidth() - 40, o.getHeight() + 12, null);
-        	}*/
         	g2.drawImage(Assets.CASTLE_GATE_SHADOW, screenX, screenY - 6, o.getWidth(), o.getHeight() + 12, null);
-        	g2.drawImage(Assets.CASTLE_GATE, screenX - 6, screenY - 6, o.getWidth() + 6, o.getHeight() + 12, null);
+        	if(this.world.getGate().isOpen()) g2.drawImage(Assets.CASTLE_OPENED_GATE, screenX - 6, screenY - 6, o.getWidth() + 6, o.getHeight() + 12, null);
+        	else g2.drawImage(Assets.CASTLE_GATE, screenX - 6, screenY - 6, o.getWidth() + 12, o.getHeight() + 12, null);
         }
     }
-
+    // disegno nemici
     private void drawEnemy(Graphics2D g2, Enemy enemy, int screenX, int screenY) {
     	if(!enemy.isBoss() ) {
             BufferedImage frame = this.spriteOf(enemy).getCurrentSprite(enemy.getDirection());
 
             g2.drawImage(frame, screenX - 6, screenY - 6, enemy.getWidth() + 12, enemy.getHeight() + 12, null);
-            g2.setColor(Color.BLACK);
-            g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
-            g2.drawString("[ LV. " + enemy.getLevel() + " ]", screenX - 3, screenY - 7);
         } else {
             drawBoss(enemy, g2, screenX, screenY);
         }
+    	
+        g2.setColor(Color.BLACK);
+        g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
+        g2.drawString("[ LV. " + enemy.getLevel() + " ]", screenX - 3, screenY - 7);
     }
+    // aggiorna animazione di movimento del player
     public void updateAnimation() {
         this.playerSprite.update(this.player.isMoving());
         for (WorldObject object : this.world.getObjects()) {
@@ -157,6 +155,7 @@ public class MapPanel extends JPanel {
             }
         }
     }
+    // disegna boss
     private void drawBoss(Enemy enemy, Graphics2D g2, int screenX, int screenY) {
     	BufferedImage sheet = null;
     	switch(enemy.getId()) {
@@ -167,10 +166,10 @@ public class MapPanel extends JPanel {
 	    		sheet = Assets.BOSS2;
 	    		break;
 	    	case 2:
-	    		sheet = Assets.BOSS1;
+	    		sheet = Assets.BOSS3;
 	    		break;
 	    	case 3:
-	    		sheet = Assets.BOSS1;
+	    		sheet = Assets.BOSS4;
 	    		break;
 	    	default:
 	    		sheet = Assets.ENEMY;
@@ -191,7 +190,7 @@ public class MapPanel extends JPanel {
         g2.setFont(new Font("Britannic Bold", Font.BOLD, 15));
         g2.drawString("[ LV. " + this.player.getLevel() + " ]", cx - 3, cy - 7);
     }
-
+    // disegna hud del player
     private void drawHud(Graphics2D g2, int cx, int cy) {
         g2.setColor(new Color(0, 0, 0, 128));
         g2.fillRect(0, 600, 200, 200);

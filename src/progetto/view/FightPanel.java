@@ -18,7 +18,7 @@ import progetto.model.Enemy;
 import progetto.model.Player;
 
 /**
- * VIEW: la schermata di combattimento.
+ * la schermata di combattimento.
  * Mostra lo stato della battaglia (HP, messaggio) leggendolo dal model; quando l'utente
  * preme un pulsante avvisa il controller tramite i callback, senza decidere nulla.
  */
@@ -33,7 +33,7 @@ public class FightPanel extends JPanel {
     private JButton attack = new JButton("Attacca");
     private JButton skills = new JButton("Abilità");
     private JButton[] skillButtons = new JButton[4];
-    private boolean skillsOpened = false; // stato del menù (solo visivo)
+    private boolean skillsOpened = false; // stato del menù
 
     private Runnable onAttack;
     private IntConsumer onSkill;
@@ -67,12 +67,12 @@ public class FightPanel extends JPanel {
         }
     }
 
-    /** Cosa fare quando l'utente preme "Attacca". */
+    // Cosa fare quando l'utente preme "Attacca"
     public void setOnAttack(Runnable onAttack) {
         this.onAttack = onAttack;
     }
 
-    /** Cosa fare quando l'utente sceglie un'abilità (riceve l'indice dell'abilità). */
+    // Cosa fare quando l'utente sceglie un'abilità (riceve l'indice dell'abilità)
     public void setOnSkill(IntConsumer onSkill) {
         this.onSkill = onSkill;
     }
@@ -125,13 +125,11 @@ public class FightPanel extends JPanel {
         g2.drawString("HP", w / 5 - w / 20, h - h / 10 + h / 15);
         g2.setFont(new Font("sanserif", Font.BOLD, w / 20));
         g2.drawString(this.player.getCurrentHP() + "/" + this.player.getTotalHP(), w / 5 + h / 10, h - h / 10 - 20);
+        
         BufferedImage status;
         switch(this.player.getStatus()) {
         	case -1:
         		status = Assets.DEBUFF;
-        		break;
-        	case 0:
-        		status = Assets.ARMOR;
         		break;
         	case 1:
         		status = Assets.BUFF;
@@ -152,10 +150,10 @@ public class FightPanel extends JPanel {
                 g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 4, h / 4, w / 2, h / 2, null);
                 break;
             case 2:
-                g2.drawImage(Assets.BOSS2_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
+                g2.drawImage(Assets.BOSS3_FIGHT, w / 2 - w / 4, h / 4, w / 2, h / 2, null);
                 break;
             case 3:
-                g2.drawImage(Assets.BOSS1_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
+                g2.drawImage(Assets.BOSS4_FIGHT, w / 2 - w / 4, h / 4, w / 2, h / 2, null);
                 break;
             default:
                 g2.drawImage(Assets.ENEMY_FIGHT, w / 2 - w / 6, h / 4, w / 3, h / 2, null);
@@ -171,9 +169,6 @@ public class FightPanel extends JPanel {
         	case -1:
         		status = Assets.DEBUFF;
         		break;
-        	case 0:
-        		status = Assets.ARMOR;
-        		break;
         	case 1:
         		status = Assets.BUFF;
         		break;
@@ -181,7 +176,7 @@ public class FightPanel extends JPanel {
         		status = null;
         		break;
         }
-        g2.drawImage(status, w / 2 - w / 6, h / 5, (int) (w / 3 * percentHP), h / 10 - 30, null);
+        g2.drawImage(status, 290, 160, 40, 40, null);
     }
 
     private void drawCombatMessage(Graphics g2, int w, int h) {
